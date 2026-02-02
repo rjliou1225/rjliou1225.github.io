@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Point x 雄獅旅遊 - 點數遊世界</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .wheel-container {
+            transition: transform 3s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .coupon-tear {
+            position: relative;
+        }
+        .coupon-tear::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-color: inherit;
+            filter: brightness(0.95);
+            border-radius: 50%;
+        }
+        .coupon-tear::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-color: inherit;
+            filter: brightness(0.95);
+            border-radius: 50%;
+        }
+
+        .step-lock-overlay {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+        }
+
+        .text-gradient-gold {
+            background: linear-gradient(to right, #fde68a, #f59e0b, #fde68a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes fade-up {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-up {
+            animation: fade-up 0.3s ease-out forwards;
+        }
+
+        .quiz-card-enter {
+            animation: slide-in 0.4s ease-out forwards;
+        }
+        @keyframes slide-in {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Icons ---
+        const IconGift = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13" /><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" /><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5" /></svg>
+        );
+        const IconCrown = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14" /></svg>
+        );
+        const IconChevronRight = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m9 18 6-6-6-6" /></svg>
+        );
+        const IconX = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
+        );
+        const IconLock = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        );
+        const IconCopy = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>
+        );
+        const IconTag = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z" /><path d="M7 7h.01" /></svg>
+        );
+        const IconGlobe = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+        );
+        const IconStar = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        );
+        const IconZap = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        );
+        const IconDiamond = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M6 3h12l4 5-10 13L2 8z"/><path d="M11 3 8 8l3 13 3-13-3-5z"/><path d="M2 8h20"/></svg>
+        );
+
+        // --- 資料配置 ---
+        const PRIZES = [
+            { id: 1, name: "旅遊金 $10k", color: "#ef4444", text: "#fff" }, 
+            { id: 2, name: "HP 100點", color: "#fff", text: "#ef4444" },
+            { id: 3, name: "訂房 $500券", color: "#fca5a5", text: "#fff" }, 
+            { id: 4, name: "漫遊 9折券", color: "#fff", text: "#ef4444" },
+            { id: 5, name: "銘謝惠顧", color: "#fee2e2", text: "#ef4444" },
+            { id: 6, name: "一日遊 88折", color: "#fff", text: "#ef4444" },
+        ];
+
+        const TRAVEL_DEALS = [
+            { id: 1, category: "日韓", title: "【東京】富士山河口湖、箱根溫泉五日", price: "32,900", reward: "5%", image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400&auto=format&fit=crop" },
+            { id: 2, category: "日韓", title: "【韓國】首爾南怡島、穿韓服遊古宮五日", price: "15,800", reward: "6%", image: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?q=80&w=400&auto=format&fit=crop" },
+            { id: 3, category: "歐美", title: "【歐美】巴黎鐵塔、阿姆斯特丹、運河十日", price: "79,900", reward: "3%", image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=400&auto=format&fit=crop" },
+            { id: 4, category: "國內", title: "【花東】太魯閣、伯朗大道、五星飯店三日", price: "8,800", reward: "8%", image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?q=80&w=400&auto=format&fit=crop" }
+        ];
+
+        // --- 璽品商品資料 (Based on image_0f802e.jpg) ---
+        const SIGNATURE_DEALS = [
+            { 
+                id: 1, 
+                title: "瀨戶內海 | 跳島賞櫻7日", 
+                subtitle: "【3/27 成團推薦】限定一團", 
+                desc: "SEA PASEO豪華渡輪、房內私湯", 
+                price: "79,900", 
+                image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=400&auto=format&fit=crop" 
+            },
+            { 
+                id: 2, 
+                title: "東北 | 雙溫泉賞櫻5日", 
+                subtitle: "【4/19 成團推薦】最後席位", 
+                desc: "百選溫泉房內私湯、多彩賞櫻", 
+                price: "84,900", 
+                image: "https://images.unsplash.com/photo-1522383225653-ed111181a951?q=80&w=400&auto=format&fit=crop" 
+            },
+            { 
+                id: 3, 
+                title: "北法 | 名堡巡禮13日", 
+                subtitle: "【5/20 成團推薦】", 
+                desc: "巴黎奢華3連泊、古董敞篷車體驗", 
+                price: "176,900", 
+                image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=400&auto=format&fit=crop" 
+            },
+            { 
+                id: 4, 
+                title: "南法 | 薰衣草仙境13日", 
+                subtitle: "紫境花海、粉色鹽田", 
+                desc: "葡萄莊園品酒、和平咖啡館晚宴", 
+                price: "232,900", 
+                image: "https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=400&auto=format&fit=crop" 
+            }
+        ];
+
+        const PROMO_CODES = [
+            { id: 1, code: "LIONHAMI200", title: "全站訂單滿額折", desc: "滿 $5,000 折 $200" },
+            { id: 2, code: "ROAMING88", title: "漫遊用戶專屬優惠", desc: "日韓行程享 88 折" }
+        ];
+
+        const QUIZ_QUESTIONS = [
+            {
+                q: "週末你最常做什麼？",
+                options: [
+                    { t: "去戶外走走 (自然型)", v: "nature" },
+                    { t: "看展逛市集 (文青型)", v: "hipster" },
+                    { t: "瘋狂購物 (購物狂)", v: "shop" },
+                    { t: "放空休息 (慵懶型)", v: "chill" }
+                ]
+            },
+            {
+                q: "旅行時最在意的是？",
+                options: [
+                    { t: "導航不能迷路", v: "nature" },
+                    { t: "分享美照上傳", v: "hipster" },
+                    { t: "折扣季買手軟", v: "shop" },
+                    { t: "睡到飽再出門", v: "chill" }
+                ]
+            }
+        ];
+
+        const QUIZ_RESULTS = {
+            "nature": { tag: "極光冒險家", desc: "喜歡自然探索", recommend: "冰島、北海道" },
+            "hipster": { tag: "質感玩家", desc: "追求生活品味", recommend: "京都、曼谷" },
+            "shop": { tag: "購物達人", desc: "掌握流行趨勢", recommend: "東京、巴黎" },
+            "chill": { tag: "慢活旅行者", desc: "換個地方休息", recommend: "峇里島、沖繩" }
+        };
+
+        // --- Components ---
+        const Modal = ({ isOpen, onClose, children }) => {
+            if (!isOpen) return null;
+            return (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-fade-in">
+                    <div className="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all scale-100">
+                        <div className="p-2 flex justify-end"><button onClick={onClose} className="p-1 rounded-full hover:bg-gray-100"><IconX className="w-6 h-6 text-gray-500" /></button></div>
+                        {children}
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [isSpinning, setIsSpinning] = useState(false);
+            const [rotation, setRotation] = useState(0);
+            const [showPrizeModal, setShowPrizeModal] = useState(false);
+            const [wonPrize, setWonPrize] = useState(null);
+            const [activeCategory, setActiveCategory] = useState("日韓");
+            const [copyStatus, setCopyStatus] = useState(null);
+            const [activeSigTab, setActiveSigTab] = useState("私藏推薦");
+
+            // Quiz State
+            const [quizStep, setQuizStep] = useState(0); 
+            const [quizResult, setQuizResult] = useState(null);
+
+            const wheelGradient = `conic-gradient(${PRIZES.map((p, i) => `${p.color} ${i * (360/PRIZES.length)}deg ${(i+1) * (360/PRIZES.length)}deg`).join(', ')})`;
+
+            const handleSpin = () => {
+                if (isSpinning || quizStep < 3) return;
+                setIsSpinning(true);
+                const targetIndex = 2; 
+                const segmentAngle = 360 / PRIZES.length;
+                const randomOffset = Math.random() * 20 - 10;
+                const targetRotation = 360 * 10 + (360 - (targetIndex * segmentAngle)) - (segmentAngle/2) + randomOffset;
+                setRotation(targetRotation);
+                setTimeout(() => { setIsSpinning(false); setWonPrize(PRIZES[targetIndex]); setShowPrizeModal(true); }, 3000);
+            };
+
+            const handleQuizOption = (val) => {
+                if (quizStep === 1) {
+                    setQuizResult(val);
+                    setQuizStep(2);
+                } else if (quizStep === 2) {
+                    setQuizStep(3); 
+                }
+            };
+
+            const copyToClipboard = (text) => {
+                const textArea = document.createElement("textarea");
+                textArea.value = text; document.body.appendChild(textArea); textArea.select();
+                try { document.execCommand('copy'); setCopyStatus(text); setTimeout(() => setCopyStatus(null), 2000); } 
+                catch (err) { console.error('Copy failed', err); }
+                document.body.removeChild(textArea);
+            };
+
+            const filteredDeals = TRAVEL_DEALS.filter(deal => activeCategory === "全部" || deal.category === activeCategory);
+
+            return (
+                <div className="max-w-md mx-auto bg-gray-50 min-h-screen pb-24 shadow-xl relative overflow-hidden font-sans">
+                    {/* Header */}
+                    <div className="bg-white px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-sm border-b border-gray-100">
+                        <div className="flex items-center gap-2">
+                            <div className="font-black text-emerald-600 italic text-xl tracking-tighter">Hami Point</div>
+                            <span className="text-gray-300">|</span>
+                            <div className="font-bold text-red-600 text-lg">雄獅旅遊</div>
+                        </div>
+                        <div className="text-sm font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg">12,580 pts</div>
+                    </div>
+
+                    {/* 1. Hero */}
+                    <div className="relative h-[200px] overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=800&auto=format&fit=crop" className="w-full h-full object-cover" alt="Hero" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent flex flex-col justify-end p-6">
+                            <h1 className="text-2xl font-black text-white leading-tight mb-1">Hami Point 帶你飛！<br/><span className="text-yellow-400 text-xl">完成測驗，解鎖抽獎</span></h1>
+                            <p className="text-white text-sm mb-4 font-medium opacity-90">1 點 &gt; 1 元，申辦漫遊再送旅遊金！</p>
+                            <button className="w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 rounded-full shadow-lg active:scale-95 transition-all text-sm flex items-center justify-center gap-2">立即登入抽機票 <IconChevronRight className="w-4 h-4" /></button>
+                        </div>
+                    </div>
+
+                    {/* 2 & 3: 互動遊樂場 */}
+                    <div className="py-6 px-4 bg-emerald-600 relative overflow-hidden border-b-4 border-emerald-700">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                        
+                        <div className="text-center mb-4 relative z-10">
+                            <div className="inline-flex items-center gap-1.5 bg-yellow-400 text-emerald-900 px-3 py-1.5 rounded-full text-xs font-black mb-1.5 shadow-sm">
+                                <IconZap className="w-3 h-3" /> 玩遊戲賺旅費：測驗解鎖轉盤
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-3xl p-4 shadow-2xl relative overflow-hidden flex gap-3 items-stretch min-h-[240px]">
+                            {/* Left Side: Quiz */}
+                            <div className="flex-[1.4] border-r border-dashed border-gray-100 pr-3 flex flex-col">
+                                {quizStep === 0 && (
+                                    <div className="h-full flex flex-col items-center justify-center text-center quiz-card-enter">
+                                        <IconStar className="w-7 h-7 text-yellow-400 fill-yellow-400 mb-3" />
+                                        <h3 className="text-sm font-black text-gray-800 leading-tight">你是哪種旅伴？</h3>
+                                        <p className="text-[11px] text-gray-400 mt-1.5 mb-4 leading-relaxed">測驗完抽萬元旅遊金</p>
+                                        <button onClick={() => setQuizStep(1)} className="bg-emerald-600 text-white font-black px-6 py-2.5 rounded-xl shadow-md active:scale-95 transition-all text-xs">開始</button>
+                                    </div>
+                                )}
+                                {quizStep >= 1 && quizStep <= 2 && (
+                                    <div className="h-full flex flex-col quiz-card-enter">
+                                        <div className="flex justify-between items-center mb-3">
+                                            <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded tracking-wider">Q{quizStep}/02</span>
+                                        </div>
+                                        <h3 className="text-sm font-black text-gray-800 mb-3 leading-snug">{QUIZ_QUESTIONS[quizStep-1].q}</h3>
+                                        <div className="grid gap-2">
+                                            {QUIZ_QUESTIONS[quizStep-1].options.map((opt, idx) => (
+                                                <button key={idx} onClick={() => handleQuizOption(opt.v)} className="w-full text-left bg-gray-50 p-2.5 rounded-xl border border-gray-100 text-[11px] font-bold text-gray-700 hover:border-emerald-600 hover:text-emerald-600 transition-all active:scale-[0.98] leading-tight shadow-sm">{opt.t}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {quizStep === 3 && (
+                                    <div className="h-full flex flex-col items-center justify-center text-center quiz-card-enter">
+                                        <div className="bg-emerald-50 text-emerald-700 text-[10px] font-black px-2.5 py-1 rounded-full mb-2">測驗完成</div>
+                                        <h3 className="text-base font-black text-emerald-600 leading-tight mb-1.5">{QUIZ_RESULTS[quizResult]?.tag}</h3>
+                                        <p className="text-[11px] text-gray-400 leading-normal mb-3">{QUIZ_RESULTS[quizResult]?.desc}</p>
+                                        <div className="bg-red-50 text-red-600 p-2 rounded-xl text-xs font-black animate-pulse border border-red-100 shadow-sm">
+                                            🎉 轉盤解鎖！
+                                        </div>
+                                        <button onClick={() => setQuizStep(0)} className="text-[11px] text-gray-300 mt-3 underline font-medium">重新測驗</button>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Right Side: Wheel */}
+                            <div className="flex-1 flex flex-col items-center justify-center relative">
+                                <div className="relative w-32 h-32">
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2.5 z-20 w-6 h-8 filter drop-shadow-md"><div className="w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[16px] border-t-yellow-400"></div></div>
+                                    <div className="w-full h-full rounded-full border-[4px] border-yellow-400 bg-white shadow-xl relative overflow-hidden wheel-container" style={{ transform: `rotate(${rotation}deg)`, background: wheelGradient }}>
+                                        {PRIZES.map((prize, index) => {
+                                            const rotate = index * (360 / PRIZES.length) + (360 / PRIZES.length / 2);
+                                            return (
+                                                <div key={prize.id} className="absolute top-0 left-1/2 -ml-2 w-4 h-1/2 origin-bottom pt-2.5 flex justify-center" style={{ transform: `rotate(${rotate}deg)` }}>
+                                                   <span className="text-[9px] font-black tracking-tighter leading-none" style={{ color: prize.text, writingMode: 'vertical-rl', textOrientation: 'upright' }}>{prize.name}</span>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                    <button onClick={handleSpin} disabled={isSpinning || quizStep < 3} className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full border-[4px] border-white shadow-xl flex flex-col items-center justify-center text-white font-black active:scale-95 transition-all z-30 ${quizStep < 3 ? 'bg-gray-300 opacity-50' : 'bg-red-600'}`}>
+                                        <span className="text-xs leading-none font-black tracking-tight">GO</span>
+                                    </button>
+                                    {quizStep < 3 && (
+                                        <div className="absolute inset-0 step-lock-overlay rounded-full flex flex-col items-center justify-center pointer-events-none">
+                                            <IconLock className="w-6 h-6 text-gray-700 mb-1" />
+                                            <span className="text-[10px] font-black text-gray-800 bg-white/95 px-2 py-0.5 rounded-full shadow-md">未解鎖</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 4. 線上旅展 */}
+                    <div className="py-8 px-4 bg-white">
+                        <div className="flex items-center justify-between mb-4">
+                            <div><h2 className="text-xl font-black text-gray-800 tracking-tight">線上旅展限時搶</h2><p className="text-xs text-gray-400 font-medium">精選行程最高回饋 <span className="text-red-600 font-black">8%</span></p></div>
+                            <div className="bg-emerald-600 text-white px-3 py-1 rounded-lg text-xs font-black shadow-md">點數回饋</div>
+                        </div>
+                        <div className="flex gap-2 mb-5 overflow-x-auto no-scrollbar">
+                            {["全部", "日韓", "歐美", "國內"].map(cat => (
+                                <button key={cat} onClick={() => setActiveCategory(cat)} className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeCategory === cat ? "bg-red-600 text-white shadow-lg" : "bg-gray-100 text-gray-500"}`}>{cat}</button>
+                            ))}
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            {filteredDeals.map(deal => (
+                                <div key={deal.id} className="bg-white rounded-2xl border border-gray-100 shadow-md overflow-hidden flex flex-col active:scale-95 transition-all">
+                                    <div className="h-24 relative overflow-hidden"><img src={deal.image} alt={deal.title} className="w-full h-full object-cover" /><div className="absolute top-0 left-0 bg-emerald-600 text-white text-[10px] font-black px-2 py-1 rounded-br-lg flex items-center gap-1"><IconTag className="w-3 h-3" />回饋 {deal.reward}</div></div>
+                                    <div className="p-3 flex-1 flex flex-col"><h3 className="text-xs font-bold text-gray-800 line-clamp-2 mb-2 leading-snug">{deal.title}</h3><div className="mt-auto flex items-end justify-between"><div className="text-red-600 font-black text-base tracking-tight">${deal.price}</div><div className="bg-gray-50 p-1.5 rounded-full"><IconChevronRight className="w-3 h-3 text-gray-300" /></div></div></div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 5. 精緻璽品專區 (Lion Signature) - NEW! */}
+                    <div className="py-10 px-4 bg-white border-t border-gray-100">
+                        <div className="flex items-center gap-2 mb-6">
+                            <h2 className="text-2xl font-black text-gray-900 tracking-tight">精緻璽品</h2>
+                            <span className="text-gray-300 text-2xl font-light">/</span>
+                            <div className="flex gap-2 overflow-x-auto no-scrollbar">
+                                <button 
+                                    onClick={() => setActiveSigTab("私藏推薦")}
+                                    className={`relative px-3 py-1 rounded text-xs font-bold whitespace-nowrap transition-all ${activeSigTab === "私藏推薦" ? "bg-red-500 text-white shadow-sm" : "bg-gray-100 text-gray-500"}`}
+                                >
+                                    私藏推薦
+                                    {activeSigTab === "私藏推薦" && <span className="absolute -top-2 -right-2 bg-yellow-400 text-white text-[8px] px-1 rounded font-black italic">HOT</span>}
+                                </button>
+                                <button 
+                                    onClick={() => setActiveSigTab("超奢旅宿")}
+                                    className={`relative px-3 py-1 rounded text-xs font-bold whitespace-nowrap transition-all ${activeSigTab === "超奢旅宿" ? "bg-red-500 text-white shadow-sm" : "bg-gray-100 text-gray-500"}`}
+                                >
+                                    超奢旅宿
+                                    <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[8px] px-1 rounded font-black italic">NEW</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Signature Carousel */}
+                        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-4 snap-x snap-mandatory">
+                            {SIGNATURE_DEALS.map(deal => (
+                                <div key={deal.id} className="min-w-[220px] bg-white rounded-2xl border border-gray-100 shadow-xl snap-start overflow-hidden flex flex-col group active:scale-[0.98] transition-all">
+                                    <div className="h-32 overflow-hidden relative">
+                                        <img src={deal.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={deal.title} />
+                                        <div className="absolute top-2 left-2">
+                                            <div className="bg-white/90 backdrop-blur px-2 py-0.5 rounded-lg flex items-center gap-1 shadow-sm">
+                                                <IconDiamond className="w-3 h-3 text-red-500" />
+                                                <span className="text-[10px] font-black text-gray-800 tracking-tighter">SIGNATURE</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="p-4 flex-1 flex flex-col">
+                                        <h3 className="font-black text-sm text-gray-900 mb-1 leading-tight">{deal.title}</h3>
+                                        <div className="text-[11px] text-red-600 font-bold mb-2">{deal.subtitle}</div>
+                                        <p className="text-[10px] text-gray-400 leading-relaxed mb-4">{deal.desc}</p>
+                                        <div className="mt-auto pt-3 border-t border-gray-50 flex items-center justify-between">
+                                            <div className="text-gray-400 text-[10px] font-bold">TWD</div>
+                                            <div className="text-xl font-black text-red-600 tracking-tighter">
+                                                {deal.price}<span className="text-[10px] ml-1 font-bold">起</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        
+                        <div className="mt-6 flex justify-center">
+                            <button className="flex items-center gap-2 text-xs font-black text-gray-400 hover:text-red-500 transition-colors">
+                                查看更多璽品系列行程 <IconChevronRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* 6. 折扣碼專區 */}
+                    <div className="py-8 px-4 bg-gray-50 border-b border-gray-100">
+                        <h2 className="text-xl font-black text-gray-800 mb-1 tracking-tight">獨家折扣碼</h2>
+                        <p className="text-xs text-gray-400 font-medium italic mb-4">點擊右側按鈕快速複製代碼</p>
+                        <div className="space-y-3">
+                            {PROMO_CODES.map(item => (
+                                <div key={item.id} className="bg-white rounded-2xl p-4 flex items-center justify-between shadow-sm relative coupon-tear overflow-hidden border border-gray-100">
+                                    <div className="flex-1 pr-4">
+                                        <h3 className="font-black text-xs text-gray-800 leading-tight">{item.title}</h3>
+                                        <div className="mt-2.5 bg-emerald-50 px-3 py-1 rounded inline-block"><span className="font-mono text-emerald-700 text-xs font-bold tracking-widest">{item.code}</span></div>
+                                    </div>
+                                    <button onClick={() => copyToClipboard(item.code)} className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-md ${copyStatus === item.code ? "bg-emerald-600 text-white" : "bg-red-600 text-white"}`}><IconCopy className="w-4 h-4" /></button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 7. 週三會員日 */}
+                    <div className="py-10 px-4 bg-white">
+                        <div className="flex items-center justify-between mb-5">
+                            <div><h2 className="text-xl font-black text-gray-800 tracking-tight">週三會員日</h2><p className="text-xs text-gray-500 font-medium">1 點抵 1.2 元，超值點數放大換</p></div>
+                        </div>
+                        <div className="flex gap-4 overflow-x-auto no-scrollbar pb-1">
+                            <div className="min-w-[170px] bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                                <div className="h-28 bg-gray-100 relative"><img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover" alt="桃園機場貴賓室" /><div className="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full">爆款</div></div>
+                                <div className="p-3"><h3 className="font-bold text-gray-800 text-xs mb-1.5">桃園機場貴賓室</h3><div className="flex items-baseline gap-1"><span className="text-xl font-black text-emerald-600">299</span><span className="text-xs text-gray-500 font-bold">點</span></div></div>
+                            </div>
+                            <div className="min-w-[170px] bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-lg flex flex-col">
+                                <div className="h-28 bg-gray-100 relative"><img src="https://images.unsplash.com/photo-1490133461872-91e869757683?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover" alt="全球機場貴賓室" /><div className="absolute top-2 left-2 bg-emerald-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full">超值</div></div>
+                                <div className="p-3"><h3 className="font-bold text-gray-800 text-xs mb-1.5">全球機場貴賓室</h3><div className="flex items-baseline gap-1"><span className="text-xl font-black text-emerald-600">500</span><span className="text-xs text-gray-500 font-bold">點</span></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 8. 剛需攔截 */}
+                    <div className="py-10 px-4 bg-blue-50 relative overflow-hidden">
+                        <h2 className="text-xl font-black text-gray-800 mb-1 tracking-tight">出國上網找中華</h2>
+                        <p className="text-xs text-gray-600 mb-6 italic font-medium">申辦完成解鎖雄獅當地票券「買一送一」</p>
+                        <div className="relative bg-white rounded-3xl shadow-xl border border-blue-100 z-10 overflow-hidden">
+                            <div className="p-5 border-b border-dashed border-gray-100 relative">
+                                <div className="flex items-center gap-3 mb-4"><div className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-black text-xs shadow-md">1</div><h3 className="font-black text-sm text-gray-800">申辦中華電信漫遊</h3></div>
+                                <button className="ml-10 bg-blue-600 text-white text-xs font-black px-6 py-2.5 rounded-xl shadow-lg active:scale-95 transition-all">查方案</button>
+                            </div>
+                            <div className="p-5 bg-gray-50/50 relative overflow-hidden">
+                                <div className="flex items-center gap-3 mb-3"><div className="w-7 h-7 rounded-full bg-gray-300 text-white flex items-center justify-center font-black text-xs shadow-inner">2</div><h3 className="font-black text-sm text-gray-400 tracking-wide">解鎖票券優惠券</h3></div>
+                                <div className="absolute inset-0 step-lock-overlay flex flex-col items-center justify-center">
+                                    <IconLock className="w-6 h-6 text-gray-700 mb-1.5 drop-shadow-sm" />
+                                    <span className="text-xs font-black text-gray-700 bg-white/95 px-3 py-1 rounded-full border border-gray-200 shadow-md">申辦後解鎖</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 9. VIP 尊榮專區 */}
+                    <div className="bg-slate-900 py-12 px-6 text-white relative">
+                        <div className="flex items-center gap-3 mb-8">
+                            <IconCrown className="w-8 h-8 text-yellow-500 shadow-lg" />
+                            <div><h2 className="text-2xl font-black text-gradient-gold tracking-tight">VIP 尊榮特權</h2><p className="text-[10px] text-yellow-600 font-bold tracking-[0.3em] uppercase opacity-80">Premium Rewards</p></div>
+                        </div>
+                        <div className="space-y-4">
+                            <div className="bg-gradient-to-br from-white/10 to-transparent backdrop-blur-lg rounded-2xl p-5 border border-white/10 shadow-inner">
+                                <div className="flex justify-between items-start mb-2.5"><h3 className="font-black text-yellow-100 text-sm">會籍直升 Status Match</h3><IconStar className="w-5 h-5 text-yellow-500 fill-yellow-500" /></div>
+                                <p className="text-xs text-gray-400 leading-relaxed mb-4 opacity-90 font-medium">中華「尊榮/璀璨」VIP 可一鍵直升雄獅白金會員，享機捷與高鐵貴賓室。</p>
+                                <button className="text-xs font-black text-yellow-500 flex items-center gap-1 group active:opacity-70 transition-all underline decoration-yellow-500/30 underline-offset-4">立即驗證身份 <IconChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" /></button>
+                            </div>
+                            <div className="bg-white/5 rounded-2xl p-4 border border-white/5 flex gap-4 items-center">
+                                <div className="w-10 h-10 rounded-xl bg-yellow-500/20 flex items-center justify-center shrink-0 text-yellow-500 border border-yellow-500/10 shadow-sm"><IconGlobe className="w-5 h-5" /></div>
+                                <div><h3 className="font-black text-sm text-yellow-100 leading-none">黑卡限定秘密行程</h3><p className="text-xs text-gray-500 mt-2 font-medium">CEO 帶路專屬米其林深度團</p></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Sticky Footer */}
+                    <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-100 p-4 shadow-2xl z-50 max-w-md mx-auto">
+                        <div className="flex gap-3">
+                            <button className="flex-1 py-3 bg-gray-50 text-gray-700 rounded-2xl font-black text-xs flex flex-col items-center justify-center border border-gray-200 active:bg-gray-100 transition-colors tracking-tighter">
+                                <IconGift className="w-4 h-4 mb-1" />我的優惠券夾
+                            </button>
+                            <button className="flex-[2] py-3 bg-red-600 text-white rounded-2xl font-black text-sm shadow-xl shadow-red-200 flex items-center justify-center gap-2 active:scale-95 transition-all">
+                                前往雄獅官網訂房 <IconChevronRight className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Modal */}
+                    <Modal isOpen={showPrizeModal} onClose={() => setShowPrizeModal(false)}>
+                        <div className="p-8 text-center">
+                            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-5 animate-bounce shadow-inner"><IconGift className="w-10 h-10 text-red-600" /></div>
+                            <h3 className="text-2xl font-black text-gray-800 mb-3 tracking-tighter">中獎啦！🎉</h3>
+                            {wonPrize && (
+                                <div className="bg-gradient-to-r from-red-600 to-red-500 text-white rounded-2xl p-6 mb-8 relative coupon-tear shadow-2xl">
+                                    <div className="text-xl font-black">{wonPrize.name}</div>
+                                    <div className="text-xs mt-3 font-bold opacity-75 uppercase tracking-widest bg-white/10 py-1 rounded-full">有效期限至 2026/12/31</div>
+                                </div>
+                            )}
+                            <button onClick={() => setShowPrizeModal(false)} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl shadow-xl hover:bg-black transition-all flex items-center justify-center gap-2 text-sm">立即歸戶使用 <IconChevronRight className="w-4 h-4" /></button>
+                        </div>
+                    </Modal>
+
+                    {/* Copy Alert */}
+                    {copyStatus && (
+                        <div className="fixed bottom-28 left-1/2 -translate-x-1/2 z-[60] bg-gray-900/95 text-white px-6 py-2.5 rounded-full text-xs font-bold animate-fade-up shadow-2xl flex items-center gap-2.5">
+                            <IconStar className="w-4 h-4 text-yellow-400 fill-yellow-400" /> 折扣碼已成功複製：{copyStatus}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
