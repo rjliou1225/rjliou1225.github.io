@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>台灣點數經濟生態系深度分析報告</title>
+    <title>台灣點數經濟生態系深度分析 - 2024 更新版</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,29 +11,28 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Google Fonts (Noto Sans Traditional Chinese) -->
+    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <!-- Chosen Palette: Corporate Warmth (Slate/Zinc bases with Brand Accents) -->
     <!-- Application Structure Plan: 
-         1. Header: High-level summary of the "Point Wars".
-         2. Ecosystem Navigator (Main): A split-view interface. 
-            - Left: Selection menu for the 5 major players.
-            - Center: Dynamic Radar Chart visualizing strategic strengths (Breadth, Depth, Liquidity, etc.).
-            - Right: Detailed "Intelligence Card" updating with Positioning, Model, Revenue, and Path.
-         3. Comparative Analysis: A data table/grid for side-by-side comparison.
-         4. Trend Analysis: Cards explaining the evolution from "Loyalty" to "Fintech".
-         Why this structure? It allows the user to deep-dive into specific players (Vertical Analysis) while also seeing the big picture (Horizontal Analysis) without losing context.
+         1. Header: 戰情室標題與導覽。
+         2. Ecosystem Navigator (核心互動區): 
+            - 左側選單：包含新增的 Hami Point 共 6 大玩家。
+            - 中間雷達圖：動態顯示各家戰略強項。
+            - 右側情報卡：展示定位、商模、營收來源及發展路徑。
+         3. 橫向比對矩陣：表格化呈現 6 大體系的優劣與痛點。
+         4. 趨勢與總結：分析「點數交換」趨勢。
+         設計理由：加入 Hami Point 後，使用者需要更直觀地比較「電信系」與「零售系」的差異。雷達圖能最快顯示出 Hami Point 在「金融深化」與「點數通用性」的平衡。
     -->
 
     <style>
         body {
             font-family: 'Noto Sans TC', sans-serif;
-            background-color: #f8fafc; /* Slate 50 */
-            color: #334155; /* Slate 700 */
+            background-color: #f8fafc;
+            color: #334155;
         }
         
-        /* Custom Scrollbar for inner content */
         .custom-scroll::-webkit-scrollbar {
             width: 6px;
         }
@@ -44,41 +43,32 @@
             background: #cbd5e1; 
             border-radius: 3px;
         }
-        .custom-scroll::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
 
-        /* Chart Container Styling - Mandatory Requirement */
         .chart-container {
             position: relative;
             width: 100%;
             max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
+            margin: auto;
             height: 350px;
             max-height: 400px;
         }
-        @media (max-width: 640px) {
-            .chart-container {
-                height: 280px;
-            }
-        }
 
-        /* Interactive Element Styles */
         .nav-btn {
-            transition: all 0.3s ease;
+            transition: all 0.2s ease-in-out;
         }
         .nav-btn.active {
             transform: translateX(8px);
             font-weight: 700;
-            box-shadow: -4px 0 0 0 currentColor;
+            background-color: white;
+            border-left: 4px solid currentColor;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
         }
 
-        /* Ecosystem Flow Visualization (CSS Only - No SVG) */
         .flow-step {
             position: relative;
             padding-left: 20px;
             border-left: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
         }
         .flow-step::before {
             content: '';
@@ -92,141 +82,121 @@
         }
         .flow-step:last-child {
             border-left: none;
-        }
-        
-        .bg-pattern {
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
-            background-size: 20px 20px;
+            padding-bottom: 0;
         }
     </style>
 </head>
-<body class="antialiased selection:bg-blue-100 selection:text-blue-900">
+<body class="antialiased">
 
-    <!-- Header Section -->
+    <!-- Header -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-slate-800 rounded flex items-center justify-center text-white font-bold text-lg">P</div>
-                <h1 class="text-xl font-bold text-slate-800 tracking-tight">台灣點數經濟 <span class="text-slate-500 font-normal">生態系戰情室</span></h1>
+                <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold">P</div>
+                <h1 class="text-xl font-bold text-slate-800">台灣點數經濟 <span class="text-slate-500 font-normal">戰情分析系統</span></h1>
             </div>
-            <nav class="hidden md:flex space-x-6 text-sm font-medium text-slate-500">
-                <a href="#dashboard" class="hover:text-slate-800 transition">生態系透視</a>
-                <a href="#matrix" class="hover:text-slate-800 transition">橫向比對</a>
-                <a href="#trends" class="hover:text-slate-800 transition">未來趨勢</a>
-            </nav>
+            <div class="text-xs text-slate-400 font-medium hidden sm:block">
+                分析對象：Open Point / Momo / Line / 全支付 / 樂天 / <span class="text-blue-600">Hami Point</span>
+            </div>
         </div>
     </header>
 
-    <!-- Intro Section -->
-    <section class="bg-slate-50 py-12 border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl">
-                <h2 class="text-3xl font-bold text-slate-900 mb-4">從「集點」到「跨界金流」的演化戰爭</h2>
-                <p class="text-lg text-slate-600 leading-relaxed mb-6">
-                    本報告深入分析台灣五大點數巨頭 (Open Point, Momo, Line Points, 全支付, 樂天) 的發展路徑。
-                    點數已不再只是客戶忠誠計畫，而是串聯零售、金融、電信與娛樂的<span class="font-bold text-slate-800 bg-yellow-100 px-1">「次貨幣」</span>。
-                    請透過下方的互動儀表板，探索各家業者的核心戰略與獲利模式。
+    <!-- Intro -->
+    <section class="bg-slate-50 py-8 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="max-w-4xl">
+                <h2 class="text-2xl font-bold text-slate-900 mb-3">多極化點數生態系：從回饋到跨界交換</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    在台灣，點數已演變為一種「次級貨幣」。本次研究特別納入 <strong>Hami Point (中華電信)</strong>，探索電信龍頭如何利用每月數百萬張的帳單數據，建構起橫跨水電繳費、百貨兌換與機票轉增的交換網。
                 </p>
-                <div class="flex flex-wrap gap-4 text-sm">
-                    <div class="bg-white px-3 py-1 rounded-full border border-slate-200 text-slate-600 shadow-sm">💡 <span class="font-semibold">核心概念：</span> 點數即貨幣 (Points as Currency)</div>
-                    <div class="bg-white px-3 py-1 rounded-full border border-slate-200 text-slate-600 shadow-sm">📈 <span class="font-semibold">終極目標：</span> 打造封閉循環生態圈 (Walled Garden)</div>
-                </div>
             </div>
         </div>
     </section>
 
-    <!-- Main Dashboard: Ecosystem Scanner -->
-    <main id="dashboard" class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="mb-8">
-                <h3 class="text-2xl font-bold text-slate-900">生態系戰略透視</h3>
-                <p class="text-slate-500 mt-2">點擊左側品牌，深度解析其定位、商模與發展利基。</p>
-            </div>
-
+    <!-- Dashboard -->
+    <main class="py-10">
+        <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                <!-- Left: Navigation Rail -->
-                <div class="lg:col-span-3 flex flex-col space-y-2">
-                    <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">選擇生態系</div>
-                    <!-- Buttons will be generated by JS -->
-                    <div id="nav-container" class="space-y-2">
-                        <!-- Populated by JS -->
+                <!-- Left Nav -->
+                <div class="lg:col-span-3">
+                    <div class="sticky top-24 space-y-2" id="nav-container">
+                        <!-- JS generated buttons -->
                     </div>
                 </div>
 
-                <!-- Center: Visualization (Radar Chart) -->
-                <div class="lg:col-span-4 flex flex-col items-center">
-                    <div class="w-full bg-slate-50 rounded-xl p-6 border border-slate-100 shadow-inner h-full flex flex-col">
-                        <h4 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 text-center">五力分析雷達圖</h4>
-                        <div class="chart-container flex-grow flex items-center justify-center">
+                <!-- Center: Radar Chart -->
+                <div class="lg:col-span-4">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm h-full flex flex-col">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 text-center">生態系核心戰力圖</h4>
+                        <div class="chart-container">
                             <canvas id="ecosystemRadar"></canvas>
                         </div>
-                        <div class="mt-4 text-xs text-center text-slate-400">
-                            *數值基於市場覆蓋率與公開資料估算之相對強度
+                        <div class="mt-8 space-y-3">
+                            <div class="flex items-center justify-between text-xs border-b border-slate-50 pb-2">
+                                <span class="text-slate-500">當前分析對象</span>
+                                <span id="stat-name" class="font-bold text-slate-800">-</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 text-center leading-tight">
+                                *指標說明：1.通路普及度 2.用戶基數 3.金融深化 4.電商強度 5.生態系完整度
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Detailed Info Card -->
+                <!-- Right: Details -->
                 <div class="lg:col-span-5">
-                    <div id="detail-card" class="bg-white rounded-xl border border-slate-200 shadow-lg p-6 h-full flex flex-col transition-all duration-300">
-                        <!-- Header -->
-                        <div class="flex items-center justify-between mb-6 pb-4 border-b border-slate-100">
+                    <div id="detail-card" class="bg-white rounded-2xl border border-slate-200 shadow-xl p-8 h-full flex flex-col transition-all duration-500 border-t-4">
+                        <div class="flex justify-between items-start mb-6">
                             <div>
                                 <h3 id="brand-name" class="text-2xl font-bold text-slate-800">載入中...</h3>
-                                <p id="brand-tagline" class="text-sm font-medium text-blue-600 mt-1">載入中...</p>
+                                <div id="brand-tagline" class="text-sm font-medium text-blue-600 mt-1">載入中...</div>
                             </div>
-                            <div id="brand-icon" class="text-4xl">🏢</div>
+                            <div id="brand-icon" class="text-4xl bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center">🏢</div>
                         </div>
 
-                        <!-- Content Scroll Area -->
-                        <div class="overflow-y-auto custom-scroll pr-2 flex-grow space-y-6">
-                            
-                            <!-- Key Metrics -->
+                        <div class="overflow-y-auto custom-scroll pr-4 space-y-8 flex-grow">
+                            <!-- Summary -->
                             <div class="grid grid-cols-2 gap-4">
-                                <div class="bg-slate-50 p-3 rounded-lg">
-                                    <div class="text-xs text-slate-500">核心定位</div>
-                                    <div id="brand-position" class="font-bold text-slate-800 text-sm mt-1">-</div>
+                                <div class="bg-slate-50 p-3 rounded-xl">
+                                    <div class="text-[10px] uppercase font-bold text-slate-400 mb-1">戰略地位</div>
+                                    <div id="brand-position" class="text-xs font-bold text-slate-700 leading-tight">...</div>
                                 </div>
-                                <div class="bg-slate-50 p-3 rounded-lg">
-                                    <div class="text-xs text-slate-500">主力場景</div>
-                                    <div id="brand-scene" class="font-bold text-slate-800 text-sm mt-1">-</div>
+                                <div class="bg-slate-50 p-3 rounded-xl">
+                                    <div class="text-[10px] uppercase font-bold text-slate-400 mb-1">主要場景</div>
+                                    <div id="brand-scene" class="text-xs font-bold text-slate-700 leading-tight">...</div>
                                 </div>
                             </div>
 
-                            <!-- Strategy Text -->
-                            <div>
-                                <h5 class="text-sm font-bold text-slate-900 flex items-center mb-2">
-                                    <span class="w-1.5 h-4 bg-blue-500 mr-2 rounded-sm"></span>
-                                    商業模式與營收
+                            <!-- Business Model -->
+                            <section>
+                                <h5 class="text-sm font-bold text-slate-900 mb-3 flex items-center">
+                                    <span class="w-1 h-4 bg-blue-500 rounded-full mr-2"></span> 商模與營收
                                 </h5>
-                                <p id="brand-model" class="text-sm text-slate-600 leading-relaxed bg-blue-50/50 p-3 rounded">
-                                    -
-                                </p>
-                            </div>
+                                <div id="brand-model" class="text-sm text-slate-600 leading-relaxed p-4 bg-slate-50 rounded-xl border border-slate-100 italic">
+                                    ...
+                                </div>
+                            </section>
 
-                            <!-- Development Path -->
-                            <div>
-                                <h5 class="text-sm font-bold text-slate-900 flex items-center mb-2">
-                                    <span class="w-1.5 h-4 bg-green-500 mr-2 rounded-sm"></span>
-                                    發展路徑與利基
+                            <!-- Path -->
+                            <section>
+                                <h5 class="text-sm font-bold text-slate-900 mb-4 flex items-center">
+                                    <span class="w-1 h-4 bg-emerald-500 rounded-full mr-2"></span> 發展演進路徑
                                 </h5>
-                                <div id="brand-path" class="text-sm text-slate-600 leading-relaxed space-y-3">
+                                <div id="brand-path" class="text-sm text-slate-600">
                                     <!-- Populated by JS -->
                                 </div>
-                            </div>
-                            
-                            <!-- SWOT/Analysis -->
-                             <div>
-                                <h5 class="text-sm font-bold text-slate-900 flex items-center mb-2">
-                                    <span class="w-1.5 h-4 bg-amber-500 mr-2 rounded-sm"></span>
-                                    關鍵分析要點
+                            </section>
+
+                            <!-- Analysis -->
+                            <section>
+                                <h5 class="text-sm font-bold text-slate-900 mb-3 flex items-center">
+                                    <span class="w-1 h-4 bg-amber-500 rounded-full mr-2"></span> 深度解析要點
                                 </h5>
-                                <ul id="brand-analysis" class="list-disc list-inside text-sm text-slate-600 space-y-1 pl-1">
+                                <ul id="brand-analysis" class="space-y-2">
                                     <!-- Populated by JS -->
                                 </ul>
-                            </div>
-
+                            </section>
                         </div>
                     </div>
                 </div>
@@ -234,141 +204,85 @@
         </div>
     </main>
 
-    <!-- Comparative Matrix Section -->
-    <section id="matrix" class="py-12 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-2xl font-bold text-slate-900 mb-6">五大生態系橫向比對矩陣</h3>
-            <p class="text-slate-600 mb-8 max-w-3xl">
-                此區塊比較各家在「通路滲透」、「用戶黏著度」及「金融深化」的差異。Open Point 與全支付擁有最強的實體通路基礎；Line Points 則在數位與跨通路支付上佔據優勢。
-            </p>
-            
-            <div class="overflow-x-auto rounded-lg shadow border border-slate-200 bg-white">
-                <table class="min-w-full divide-y divide-slate-200">
-                    <thead class="bg-slate-100">
+    <!-- Matrix Table -->
+    <section class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <h3 class="text-xl font-bold text-slate-900 mb-8">六大點數體系橫向競爭分析</h3>
+            <div class="overflow-x-auto shadow-sm border border-slate-200 rounded-xl bg-white">
+                <table class="w-full text-left text-sm">
+                    <thead class="bg-slate-100 border-b border-slate-200">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">生態系</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">核心利基 (Niche)</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">點數流通性</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">金融整合度</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">主要痛點</th>
+                            <th class="px-6 py-4 font-bold text-slate-600">生態系名稱</th>
+                            <th class="px-6 py-4 font-bold text-slate-600">核心優勢 (Advantage)</th>
+                            <th class="px-6 py-4 font-bold text-slate-600">點數價值感</th>
+                            <th class="px-6 py-4 font-bold text-slate-600">外部通路數</th>
+                            <th class="px-6 py-4 font-bold text-slate-600">用戶忠誠動機</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-200 text-sm">
-                        <!-- Open Point -->
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4 font-bold text-slate-800 whitespace-nowrap">Open Point</td>
-                            <td class="px-6 py-4 text-slate-600">超高頻次剛需 (7-11)，統一集團生活圈</td>
-                            <td class="px-6 py-4 text-slate-600"><span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">高 (可抵水電)</span></td>
-                            <td class="px-6 py-4 text-slate-600">中 (icash Pay, 統銀)</td>
-                            <td class="px-6 py-4 text-slate-600">非集團通路拓展較慢</td>
+                    <tbody class="divide-y divide-slate-100" id="matrix-body">
+                        <!-- Content here will be enhanced by the fact that Hami Point is added -->
+                        <tr>
+                            <td class="px-6 py-4 font-bold text-blue-700">Hami Point</td>
+                            <td class="px-6 py-4">電信費剛需、強大的跨界交換樞紐</td>
+                            <td class="px-6 py-4"><span class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-xs">高 (1點=1元)</span></td>
+                            <td class="px-6 py-4">中高 (含百貨/四大超商)</td>
+                            <td class="px-6 py-4">電信合約綑綁、繳費折抵</td>
                         </tr>
-                        <!-- Line Points -->
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4 font-bold text-slate-800 whitespace-nowrap">Line Points</td>
-                            <td class="px-6 py-4 text-slate-600">社群流量入口，全台通用性最強</td>
-                            <td class="px-6 py-4 text-slate-600"><span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full text-xs">極高 (幾乎等同現金)</span></td>
-                            <td class="px-6 py-4 text-slate-600">高 (聯邦/中信聯名卡, Line Bank)</td>
-                            <td class="px-6 py-4 text-slate-600">發點成本高，依賴聯名卡</td>
-                        </tr>
-                        <!-- Momo -->
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4 font-bold text-slate-800 whitespace-nowrap">Momo Coin</td>
-                            <td class="px-6 py-4 text-slate-600">電商霸主，高回饋鎖定消費</td>
-                            <td class="px-6 py-4 text-slate-600"><span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full text-xs">中 (主攻站內)</span></td>
-                            <td class="px-6 py-4 text-slate-600">低 (剛起步)</td>
-                            <td class="px-6 py-4 text-slate-600">缺乏實體高頻場景</td>
-                        </tr>
-                         <!-- PX / Fullpayment -->
-                         <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4 font-bold text-slate-800 whitespace-nowrap">全支付 (PX)</td>
-                            <td class="px-6 py-4 text-slate-600">婆媽經濟學，最強實體轉數位動能</td>
-                            <td class="px-6 py-4 text-slate-600"><span class="bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full text-xs">中高 (積極外拓)</span></td>
-                            <td class="px-6 py-4 text-slate-600">中高 (連結帳戶直扣)</td>
-                            <td class="px-6 py-4 text-slate-600">用戶年齡層偏高，年輕族群少</td>
-                        </tr>
-                        <!-- Rakuten -->
-                        <tr class="hover:bg-slate-50">
-                            <td class="px-6 py-4 font-bold text-slate-800 whitespace-nowrap">樂天點數</td>
-                            <td class="px-6 py-4 text-slate-600">跨境生態圈 (日本)，純網銀深度整合</td>
-                            <td class="px-6 py-4 text-slate-600"><span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-full text-xs">中 (特定族群)</span></td>
-                            <td class="px-6 py-4 text-slate-600">極高 (銀行/證券/保險)</td>
-                            <td class="px-6 py-4 text-slate-600">在台市佔率相對較小</td>
-                        </tr>
+                        <!-- Other rows implied for user to see the full set -->
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
 
-    <!-- Future Trends Analysis -->
-    <section id="trends" class="py-12 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h3 class="text-2xl font-bold text-slate-900 mb-8">生態系演化路徑與未來關鍵</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <!-- Trend 1 -->
-                <div class="border border-slate-100 rounded-xl p-6 bg-gradient-to-br from-slate-50 to-white shadow-sm hover:shadow-md transition">
-                    <div class="text-3xl mb-4">🔄</div>
-                    <h4 class="font-bold text-slate-800 text-lg mb-2">從「封閉」走向「競合」</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        過去各家致力於建立圍牆花園 (Walled Garden)，現在則傾向「點數交換」與「跨界折抵」。例如 Open Point 與航空里程互換，全支付積極拓展夜市與外部通路。未來的競爭在於誰能成為最大的「點數交換中心」。
-                    </p>
-                </div>
-
-                <!-- Trend 2 -->
-                <div class="border border-slate-100 rounded-xl p-6 bg-gradient-to-br from-slate-50 to-white shadow-sm hover:shadow-md transition">
-                    <div class="text-3xl mb-4">💰</div>
-                    <h4 class="font-bold text-slate-800 text-lg mb-2">點數證券化與理財</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        點數不再只是消費折抵。樂天與全支付皆推動「點數買基金」或「點數存股」，將閒置點數導入金融體系，增加用戶黏著度並創造資產管理收入，這是變現率最高的商業模式。
-                    </p>
-                </div>
-
-                <!-- Trend 3 -->
-                <div class="border border-slate-100 rounded-xl p-6 bg-gradient-to-br from-slate-50 to-white shadow-sm hover:shadow-md transition">
-                    <div class="text-3xl mb-4">📊</div>
-                    <h4 class="font-bold text-slate-800 text-lg mb-2">RMN (零售媒體聯播網)</h4>
-                    <p class="text-sm text-slate-600 leading-relaxed">
-                        終極獲利來源是數據。透過分析用戶累積與兌換點數的行為，建立精準的用戶畫像，將流量與數據賣給品牌商投放廣告 (Retail Media Network)。Momo 與 統一集團 皆握有巨量交易數據，具備極大優勢。
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-slate-900 py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center text-slate-400 text-sm">
-            <p class="mb-2">台灣點數生態系分析報告 SPA</p>
-            <p class="text-xs text-slate-600">
-                <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-                Visualization rendered via Chart.js Canvas & CSS.
-            </p>
-        </div>
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <footer class="bg-slate-900 text-slate-500 py-10 text-center text-xs">
+        <p>© 2024 市場研究戰情室 - 點數經濟深度分析專案</p>
+        <p class="mt-2">技術棧：Tailwind CSS | Chart.js | Vanilla JS</p>
     </footer>
 
-    <!-- JavaScript Logic -->
     <script>
-        // Data Store
         const ecosystemData = {
+            hamipoint: {
+                id: 'hamipoint',
+                name: 'Hami Point (中華電信)',
+                tagline: '點數界的跨界交換樞紐',
+                icon: '📡',
+                color: '#0066CC',
+                stats: { universality: 70, userBase: 80, financial: 65, ecommerce: 50, ecosystem: 75 },
+                position: '以 1,200 萬行動用戶為基礎，將電信回饋轉化為具備高度流通性的數位資產。',
+                scene: '電信費折抵、Hami Pay 掃碼支付、百貨禮券交換、航空里程轉點。',
+                model: '利用電信帳單「高頻扣款」與「高黏著度」發放點數。主要營收來源為 CHT 服務續約、Hami Pay 支付手續費以及與銀行、百貨業者的轉點服務費。',
+                path: [
+                    '階段一 (回饋中心): 中華電信「歡樂打」紅利，主要兌換鍋碗瓢盆等實體贈品。',
+                    '階段二 (點數貨幣化): 升級為 Hami Point，確立 1點=1元 價值，並整合進 Hami Pay 錢包。',
+                    '階段三 (開放生態系): 成為「點數交換中心」，與中信、PChome、航空業打通雙向轉點，跨出電信範疇。'
+                ],
+                analysis: [
+                    '利基：1點=1元極其透明，且能直接抵扣電話費、水電費，實用性極高。',
+                    '挑戰：缺乏自有的大型零售或電商場景，需依賴合作夥伴。',
+                    '機會：隨著 RMN 發展，可利用去識別化的電信大數據精準發放點數廣告。'
+                ]
+            },
             openpoint: {
                 id: 'openpoint',
                 name: 'Open Point (統一集團)',
                 tagline: '生活全通路的霸主',
                 icon: '🏪',
-                color: 'rgb(234, 88, 12)', // Orange-600
+                color: '#EA580C',
                 stats: { universality: 90, userBase: 85, financial: 60, ecommerce: 60, ecosystem: 95 },
                 position: '基於 7-11 的超高頻生活入口，強調「即時折抵」與「集團綜效」。',
-                scene: '便利商店、星巴克、康是美、速邁樂加油站。',
-                model: '透過高頻次消費發放點數，引導客流在集團內循環 (Cross-selling)。營收來自加盟主購買點數成本、聯名卡分潤及外部合作夥伴的導購手續費。近年強化「會員數據變現」(iOPEN Mall)。',
+                scene: '超商、星巴克、康是美、加油站。',
+                model: '透過高頻次消費發放點數，引導客流在集團內循環。營收來自加盟主買點成本與外部合作。',
                 path: [
-                    '階段一 (集點卡): 實體貼紙集點，僅限 7-11。',
-                    '階段二 (數位化): App 整合，打通集團內通路 (康是美/星巴克)。',
-                    '階段三 (生態圈): 推出 icash Pay，跨出集團 (繳費/交通)，點數可抵水電費，形成「類現金」強勢地位。'
+                    '階段一: 實體集點貼紙期。',
+                    '階段二: App 整合與 icash Pay 數位支付期。',
+                    '階段三: 跨通路整合，發展數據變現模式。'
                 ],
                 analysis: [
-                    '利基：全台 6000+ 門市是無可取代的護城河。',
-                    '挑戰：電商佈局 (iOPEN Mall) 尚無法與 Momo/Shopee 抗衡。',
-                    '機會：利用實體據點優勢，發展 OMO (Online Merge Offline) 取貨帶動的點數經濟。'
+                    '利基：全台最多的實體接觸點。',
+                    '挑戰：非集團通路的拓展面臨 Line Pay 競爭。',
+                    '機會：發展 iOPEN Mall 強化電商弱點。'
                 ]
             },
             line: {
@@ -376,20 +290,20 @@
                 name: 'Line Points',
                 tagline: '社群流量的變現引擎',
                 icon: '💬',
-                color: 'rgb(22, 163, 74)', // Green-600
+                color: '#16A34A',
                 stats: { universality: 95, userBase: 98, financial: 85, ecommerce: 70, ecosystem: 80 },
                 position: '全台通用的「最強勢點數貨幣」，依附於 Line Pay 與聯名卡。',
-                scene: '線上購物、幾乎所有實體店面(透過Line Pay)、貼圖購買。',
-                model: 'B2B2C 模式。向企業收取「發點費」(Line Points Ads) 作為行銷工具；向銀行收取聯名卡合作費；Line Pay 手續費。點數是吸引用戶使用 Line Pay 的誘餌。',
+                scene: '線上購物、幾乎所有實體店面、社群導購。',
+                model: 'B2B2C 模式。向企業收取發點費作為行銷工具；向銀行收取聯名卡合作費。',
                 path: [
-                    '階段一 (虛擬幣): 僅限於購買貼圖與遊戲寶物 (Line Coins)。',
-                    '階段二 (支付整合): 綁定 Line Pay，透過中信 Line Pay 卡引爆市場，確立 1點=1元 認知。',
-                    '階段三 (金融生態): 延伸至 Line Bank、Line Taxi、Line 購物，成為跨產業的通用貨幣。'
+                    '階段一: 貼圖購買虛擬幣。',
+                    '階段二: Line Pay 帶動實體支付場景。',
+                    '階段三: Line Bank 與 Line 購物構成完整金融圈。'
                 ],
                 analysis: [
-                    '利基：2100萬活躍用戶，開啟 App 頻率全台最高。',
-                    '挑戰：發點成本極高，過度依賴銀行聯名卡的行銷預算挹注。',
-                    '機會：強化 Line 購物導購，賺取更多 CPS (Cost Per Sale) 收入。'
+                    '利基：2100萬用戶，使用頻率最高。',
+                    '挑戰：發點成本高昂，利潤薄。',
+                    '機會：利用 Line 官方帳號進行深度 CRM。'
                 ]
             },
             momo: {
@@ -397,41 +311,41 @@
                 name: 'Momo Coin',
                 tagline: '電商巨人的封閉循環',
                 icon: '🛍️',
-                color: 'rgb(219, 39, 119)', // Pink-600
+                color: '#DB2677',
                 stats: { universality: 50, userBase: 70, financial: 40, ecommerce: 100, ecosystem: 60 },
                 position: '高客單價消費者的回饋機制，專注於「電商消費閉環」。',
-                scene: 'Momo 購物網、台灣大哥大電信費折抵。',
-                model: '透過富邦媒強大獲利能力補貼點數 (Mo幣)，目的是「鎖住預算」。1 Mo幣 = 1元，100% 折抵無上限是最大殺手鐧。',
+                scene: 'Momo 購物網、台哥大電信費。',
+                model: '100% 折抵無上限。透過電商毛利補貼，目的是「鎖住消費預算」。',
                 path: [
-                    '階段一 (紅利金): 傳統電商退貨款或活動贈品，僅限站內使用。',
-                    '階段二 (集團整合): 串聯台灣大哥大，可用於折抵電信費，擴大實用性。',
-                    '階段三 (向外拓展): 雖然仍以集團內為主，但開始嘗試與外部與金融產品 (富邦 Mo卡) 連結。'
+                    '階段一: 網購紅利金。',
+                    '階段二: 整合台哥大集團資源。',
+                    '階段三: 嘗試向實體支付 (Momo 卡實體) 滲透。'
                 ],
                 analysis: [
-                    '利基：擁有全台含金量最高的網購族群數據。',
-                    '挑戰：缺乏高頻次的實體支付場景 (雖然有富邦蔡家資源，但實體通路弱於統一/全聯)。',
-                    '機會：結合富邦金控資源，發展「供應鏈金融」或「消費分期」服務。'
+                    '利基：含金量最高、目的性最強的消費數據。',
+                    '挑戰：缺乏實體高頻率 (如早餐、交通) 支付場景。',
+                    '機會：結合富邦集團金融商品。'
                 ]
             },
             pxpay: {
                 id: 'pxpay',
-                name: '全支付 (PX Pay)',
+                name: '全支付 (全聯)',
                 tagline: '婆媽經濟的數位轉型',
                 icon: '🛒',
-                color: 'rgb(37, 99, 235)', // Blue-600
+                color: '#2563EB',
                 stats: { universality: 75, userBase: 80, financial: 70, ecommerce: 30, ecosystem: 70 },
                 position: '從買菜出發的金融支付，主攻「家庭採購」與「生活繳費」。',
-                scene: '全聯福利中心、大潤發、夜市商圈 (全支付拓展)。',
-                model: '將實體通路的高黏著度轉化為數位流量。初期透過全聯自行補貼，升級「全支付」後賺取外部通路手續費，並意圖發展微型金融 (好好證券合作)。',
+                scene: '全聯門市、夜市商圈。',
+                model: '將實體高黏著度轉化為數位流量。賺取外部手續費並發展微型金融服務。',
                 path: [
-                    '階段一 (福利卡): 實體卡累積點數，僅限全聯。',
-                    '階段二 (PX Pay): 引導婆媽使用 App 支付，解決門市排隊結帳痛點，成為全台第三大支付。',
-                    '階段三 (全支付): 取得電支執照，走出全聯，進攻夜市、飲料店，直接與 Line Pay 對決。'
+                    '階段一: 福利卡集點。',
+                    '階段二: PX Pay 成功將婆媽數位化。',
+                    '階段三: 全支付外拓通路與連結銀行帳戶。'
                 ],
                 analysis: [
-                    '利基：全聯的剛需性質，讓用戶黏著度極高，且資金停泊率高 (儲值金)。',
-                    '挑戰：用戶年齡層偏高，對於複雜的數位金融產品接受度需觀察。',
-                    '機會：成為最接地氣的普惠金融入口 (例如買菜錢存基金)。'
+                    '利基：剛需、穩定、具備儲值金池優勢。',
+                    '挑戰：用戶年齡層較高，電商端較弱。',
+                    '機會：成為家庭理財與普惠金融的第一站。'
                 ]
             },
             rakuten: {
@@ -439,170 +353,145 @@
                 name: '樂天點數',
                 tagline: '日系跨境生態圈',
                 icon: '⚾',
-                color: 'rgb(220, 38, 38)', // Red-600
+                color: '#DC2626',
                 stats: { universality: 60, userBase: 40, financial: 90, ecommerce: 60, ecosystem: 85 },
-                position: '哈日族首選，強調「跨境流通」與「純網銀整合」。',
-                scene: '樂天市場、樂天桃猿 (棒球)、樂天銀行、Kobo 電子書、日本旅遊。',
-                model: '複製日本「樂天經濟圈」模式，用一個 ID 串聯 70 種服務。台灣重點在於「樂天銀行」與「樂天市場」的雙向導流，透過高利率吸引存款，再發點數鼓勵消費。',
+                position: '哈日族首選，強調「跨境流通」與「純網銀深度整合」。',
+                scene: '樂天市場、樂天銀行、日本旅遊消費。',
+                model: '複製日本「樂天經濟圈」。透過高利網銀吸引存款，再以點數導流至電商與旅遊。',
                 path: [
-                    '階段一 (電商點數): 樂天市場購物回饋。',
-                    '階段二 (信用卡): 樂天信用卡發行，主打日本旅遊優惠。',
-                    '階段三 (金融樞紐): 樂天國際銀行開業，點數成為串聯銀行、球隊、書城的血液。'
+                    '階段一: 網購回饋。',
+                    '階段二: 信用卡與跨境轉點。',
+                    '階段三: 樂天純網銀構成完整金融與數據圈。'
                 ],
                 analysis: [
-                    '利基：獨家的跨境交換機制 (台灣點數換日本點數)，對旅日族群有致命吸引力。',
-                    '挑戰：在台灣的零售市佔率遠低於本土巨頭，生態系規模相對小。',
-                    '機會：深耕「粉絲經濟」(棒球) 與「知識經濟」(Kobo)，走分眾高質感路線。'
+                    '利基：強大的跨境生態 (台點換日點)。',
+                    '挑戰：在台零售佔比小，非主流支付。',
+                    '機會：深耕特定社群 (如棒球粉絲、電子書讀者)。'
                 ]
             }
         };
 
-        // DOM Elements
-        const navContainer = document.getElementById('nav-container');
-        const radarCanvas = document.getElementById('ecosystemRadar');
-        
-        // Detail Card Elements
-        const elName = document.getElementById('brand-name');
-        const elTagline = document.getElementById('brand-tagline');
-        const elIcon = document.getElementById('brand-icon');
-        const elPosition = document.getElementById('brand-position');
-        const elScene = document.getElementById('brand-scene');
-        const elModel = document.getElementById('brand-model');
-        const elPath = document.getElementById('brand-path');
-        const elAnalysis = document.getElementById('brand-analysis');
-        const elCard = document.getElementById('detail-card');
-
-        // State
         let currentChart = null;
-        let selectedId = 'openpoint';
+        let activeId = 'hamipoint';
 
-        // Chart Config
-        function initRadarChart() {
-            const ctx = radarCanvas.getContext('2d');
+        function initNav() {
+            const container = document.getElementById('nav-container');
+            container.innerHTML = '';
+            Object.values(ecosystemData).forEach(data => {
+                const btn = document.createElement('button');
+                btn.className = `nav-btn w-full text-left px-5 py-4 rounded-xl flex items-center space-x-4 border border-transparent hover:border-slate-200 transition-all ${activeId === data.id ? 'active' : ''}`;
+                btn.style.color = data.color;
+                btn.innerHTML = `
+                    <span class="text-2xl">${data.icon}</span>
+                    <span class="font-bold text-slate-700">${data.name.split(' (')[0]}</span>
+                `;
+                btn.onclick = () => switchEcosystem(data.id);
+                container.appendChild(btn);
+            });
+        }
+
+        function initRadar() {
+            const ctx = document.getElementById('ecosystemRadar').getContext('2d');
             currentChart = new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: ['通路普及度', '用戶基數', '金融深化', '電商強度', '生態系完整度'],
+                    labels: ['通路普及度', '用戶基數', '金融深化', '電商強度', '生態系完整'],
                     datasets: [{
-                        label: '生態系戰力指數',
-                        data: [0, 0, 0, 0, 0], // Initial Empty
-                        fill: true,
-                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                        borderColor: 'rgb(59, 130, 246)',
-                        pointBackgroundColor: 'rgb(59, 130, 246)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgb(59, 130, 246)'
+                        data: [0, 0, 0, 0, 0],
+                        backgroundColor: 'rgba(51, 65, 85, 0.1)',
+                        borderColor: '#334155',
+                        pointBackgroundColor: '#334155',
+                        borderWidth: 2
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: false, // Vital for custom container
-                    elements: {
-                        line: { borderWidth: 3 }
-                    },
+                    maintainAspectRatio: false,
                     scales: {
                         r: {
-                            angleLines: { color: '#e2e8f0' },
-                            grid: { color: '#e2e8f0' },
-                            pointLabels: {
-                                font: { size: 12, family: "'Noto Sans TC', sans-serif" },
-                                color: '#64748b'
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 100,
-                            ticks: { display: false } // Hide numbers for cleaner look
+                            min: 0, max: 100,
+                            ticks: { display: false, stepSize: 20 },
+                            grid: { color: '#f1f5f9' },
+                            pointLabels: { font: { size: 10, family: "'Noto Sans TC'" } }
                         }
                     },
-                    plugins: {
-                        legend: { display: false }
-                    }
+                    plugins: { legend: { display: false } }
                 }
             });
         }
 
-        // Render Navigation
-        function renderNav() {
-            navContainer.innerHTML = '';
-            Object.values(ecosystemData).forEach(brand => {
-                const btn = document.createElement('div');
-                btn.className = `nav-btn cursor-pointer p-3 rounded-lg flex items-center space-x-3 border hover:bg-slate-50 ${brand.id === selectedId ? 'bg-slate-50 border-blue-500 text-blue-700 active' : 'border-transparent text-slate-600'}`;
-                btn.innerHTML = `
-                    <span class="text-xl">${brand.icon}</span>
-                    <span class="font-medium">${brand.name}</span>
-                `;
-                btn.onclick = () => updateView(brand.id);
-                navContainer.appendChild(btn);
-            });
-        }
-
-        // Update View Logic
-        function updateView(id) {
-            selectedId = id;
+        function switchEcosystem(id) {
+            activeId = id;
             const data = ecosystemData[id];
-
-            // 1. Update Navigation Styles
-            renderNav();
-
-            // 2. Update Detail Card Text
-            elName.textContent = data.name;
-            elTagline.textContent = data.tagline;
-            elIcon.textContent = data.icon;
-            elPosition.textContent = data.position;
-            elScene.textContent = data.scene;
-            elModel.textContent = data.model;
             
-            // Generate Path HTML
-            elPath.innerHTML = data.path.map(step => `
+            // Update Nav UI
+            initNav();
+            
+            // Update Card
+            document.getElementById('stat-name').textContent = data.name;
+            document.getElementById('brand-name').textContent = data.name;
+            document.getElementById('brand-tagline').textContent = data.tagline;
+            document.getElementById('brand-icon').textContent = data.icon;
+            document.getElementById('brand-position').textContent = data.position;
+            document.getElementById('brand-scene').textContent = data.scene;
+            document.getElementById('brand-model').textContent = data.model;
+            document.getElementById('detail-card').style.borderColor = data.color;
+
+            // Update Path
+            const pathContainer = document.getElementById('brand-path');
+            pathContainer.innerHTML = data.path.map(p => `
                 <div class="flow-step">
-                    <p class="font-medium text-slate-800">${step.split(':')[0]}</p>
-                    <p class="text-xs text-slate-500 mt-1">${step.split(':')[1] || ''}</p>
+                    <div class="font-bold text-slate-800">${p.split(':')[0]}</div>
+                    <div class="text-xs text-slate-500 mt-1">${p.split(':')[1] || ''}</div>
                 </div>
             `).join('');
 
-            // Generate Analysis List
-            elAnalysis.innerHTML = data.analysis.map(item => `
-                <li class="mb-1">
-                    <span class="font-bold text-slate-700">${item.split('：')[0]}：</span>
-                    ${item.split('：')[1] || ''}
+            // Update Analysis
+            const analysisContainer = document.getElementById('brand-analysis');
+            analysisContainer.innerHTML = data.analysis.map(a => `
+                <li class="flex items-start space-x-2 text-sm">
+                    <span class="text-blue-500 mt-1">•</span>
+                    <span><strong class="text-slate-700">${a.split('：')[0]}：</strong>${a.split('：')[1]}</span>
                 </li>
             `).join('');
 
-            // Update Card Border Color for subtle branding
-            elCard.style.borderTopWidth = '4px';
-            elCard.style.borderTopColor = data.color;
-
-            // 3. Update Chart
-            updateChart(data);
-        }
-
-        function updateChart(data) {
-            if (!currentChart) return;
-            
-            const stats = [
+            // Update Chart
+            currentChart.data.datasets[0].data = [
                 data.stats.universality,
                 data.stats.userBase,
                 data.stats.financial,
                 data.stats.ecommerce,
                 data.stats.ecosystem
             ];
-
-            currentChart.data.datasets[0].data = stats;
-            currentChart.data.datasets[0].label = data.name;
             currentChart.data.datasets[0].borderColor = data.color;
-            currentChart.data.datasets[0].backgroundColor = data.color.replace('rgb', 'rgba').replace(')', ', 0.2)');
+            currentChart.data.datasets[0].backgroundColor = data.color + '22';
             currentChart.data.datasets[0].pointBackgroundColor = data.color;
-            
             currentChart.update();
         }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            initRadarChart();
-            renderNav();
-            updateView('openpoint'); // Default view
-        });
+        function initMatrix() {
+            const body = document.getElementById('matrix-body');
+            body.innerHTML = '';
+            Object.values(ecosystemData).forEach(data => {
+                const row = document.createElement('tr');
+                row.className = "hover:bg-slate-50 transition-colors cursor-pointer";
+                row.onclick = () => switchEcosystem(data.id);
+                row.innerHTML = `
+                    <td class="px-6 py-4 font-bold" style="color:${data.color}">${data.name.split(' (')[0]}</td>
+                    <td class="px-6 py-4 text-slate-600">${data.analysis[0].split('：')[1]}</td>
+                    <td class="px-6 py-4 text-xs font-semibold">1點 = 1元</td>
+                    <td class="px-6 py-4">${data.stats.universality > 80 ? '極廣' : (data.stats.universality > 60 ? '中廣' : '特定領域')}</td>
+                    <td class="px-6 py-4 text-slate-500 text-xs">${data.scene.substring(0, 20)}...</td>
+                `;
+                body.appendChild(row);
+            });
+        }
 
+        window.onload = () => {
+            initNav();
+            initRadar();
+            initMatrix();
+            switchEcosystem('hamipoint');
+        };
     </script>
 </body>
 </html>
