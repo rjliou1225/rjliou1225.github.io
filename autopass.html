@@ -15,6 +15,7 @@
             --hami-orange: #F47920;
             --hami-orange-dark: #E66A10;
             --autopass-blue: #0070FF;
+            --wbc-red: #E10600;
         }
 
         body {
@@ -27,6 +28,7 @@
         .bg-hami { background-color: var(--hami-orange); }
         .text-hami { color: var(--hami-orange); }
         .border-hami { border-color: var(--hami-orange); }
+        .bg-wbc { background-color: var(--wbc-red); }
 
         /* 滑順過場 */
         .page-transition {
@@ -68,6 +70,16 @@
         }
         input:checked ~ .toggle-dot {
             transform: translateX(100%);
+        }
+
+        /* WBC 閃爍效果 */
+        .badge-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -219,17 +231,40 @@
             <!-- 區塊：會籍制度與比較 -->
             <div id="section-pro" class="section-hidden space-y-8">
                 
-                <!-- autopass 會員制說明區 -->
+                <!-- WBC 2026 限定專區 -->
+                <div class="bg-gradient-to-r from-blue-700 to-blue-500 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl border border-blue-400">
+                    <div class="relative z-10">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-wbc text-white text-[10px] font-black px-2 py-0.5 rounded badge-pulse">WBC 2026</span>
+                            <span class="text-xs font-bold opacity-90 uppercase tracking-widest">Limited Edition</span>
+                        </div>
+                        <h3 class="text-xl font-black mb-2">升級 PRO 應援經典賽</h3>
+                        <p class="text-[11px] text-blue-50 leading-relaxed font-medium opacity-90 mb-4">
+                            訂閱 PRO 會籍，不只享行車優惠，完成首筆扣款再抽 WBC 限量版棒球與經典賽周邊！
+                        </p>
+                        <div class="flex gap-2">
+                            <div class="bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1.5">
+                                <i data-lucide="ticket" class="w-3 h-3 text-yellow-300"></i> 周邊抽獎
+                            </div>
+                            <div class="bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-bold flex items-center gap-1.5">
+                                <i data-lucide="star" class="w-3 h-3 text-yellow-300"></i> 加倍贈點
+                            </div>
+                        </div>
+                    </div>
+                    <i data-lucide="trophy" class="absolute -right-4 -bottom-4 w-28 h-28 text-white/10 rotate-12"></i>
+                </div>
+
+                <!-- autopass 會員制詳細對照 -->
                 <div class="space-y-4">
                     <div class="flex flex-col items-center text-center">
-                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mb-3 shadow-sm border border-blue-100">
+                        <div class="w-12 h-12 bg-orange-50 text-orange-600 rounded-full flex items-center justify-center mb-3 shadow-sm border border-orange-100">
                             <i data-lucide="award" class="w-6 h-6"></i>
                         </div>
-                        <h2 class="text-xl font-black text-gray-800 tracking-tight">autopass 會員制說明</h2>
-                        <p class="text-gray-400 text-xs mt-1 px-4">加入會籍，讓 Hami Point 成為您的全能用車金</p>
+                        <h2 class="text-xl font-black text-gray-800 tracking-tight">麻吉付 PRO 權益說明</h2>
+                        <p class="text-gray-400 text-xs mt-1 px-4 tracking-tight">全方位升級您的智慧用車體驗</p>
                     </div>
 
-                    <!-- 等級對照表 -->
+                    <!-- 權益對照表 -->
                     <div class="bg-white rounded-3xl border border-gray-100 shadow-lg overflow-hidden">
                         <table class="w-full text-left text-xs">
                             <thead>
@@ -241,24 +276,29 @@
                             </thead>
                             <tbody class="text-gray-600 font-medium">
                                 <tr class="border-b border-gray-50">
-                                    <td class="p-4">加油點數回饋</td>
+                                    <td class="p-4 leading-tight">加油加碼回饋<br><span class="text-[10px] text-gray-300">全台特約油站</span></td>
                                     <td class="p-4 text-center italic text-gray-300">無</td>
-                                    <td class="p-4 text-center text-orange-600 font-black italic">2X 加倍</td>
+                                    <td class="p-4 text-center text-orange-600 font-black italic">最高 2P / 升</td>
                                 </tr>
                                 <tr class="border-b border-gray-50">
-                                    <td class="p-4">特約停車折扣</td>
+                                    <td class="p-4 leading-tight">特約停車折扣<br><span class="text-[10px] text-gray-300">嘟嘟房/台灣聯通等</span></td>
                                     <td class="p-4 text-center italic text-gray-300">無</td>
-                                    <td class="p-4 text-center text-orange-600">享 95 折</td>
+                                    <td class="p-4 text-center text-orange-600 font-bold italic underline">享 95 折</td>
                                 </tr>
                                 <tr class="border-b border-gray-50">
-                                    <td class="p-4">路邊停車代繳</td>
-                                    <td class="p-4 text-center">每筆 5 元</td>
-                                    <td class="p-4 text-center text-orange-600 italic">免手續費</td>
+                                    <td class="p-4 leading-tight">路邊停車代繳<br><span class="text-[10px] text-gray-300">全台政府停車費</span></td>
+                                    <td class="p-4 text-center text-gray-400">每筆 5 元</td>
+                                    <td class="p-4 text-center text-orange-600 font-bold italic">全免手續費</td>
+                                </tr>
+                                <tr class="border-b border-gray-50">
+                                    <td class="p-4 leading-tight">精選洗車折扣<br><span class="text-[10px] text-gray-300">每月折價券</span></td>
+                                    <td class="p-4 text-center italic text-gray-300">無</td>
+                                    <td class="p-4 text-center text-orange-600 font-bold">每月 30 元券</td>
                                 </tr>
                                 <tr>
-                                    <td class="p-4">道路救援服務</td>
+                                    <td class="p-4 leading-tight">道路救援服務<br><span class="text-[10px] text-gray-300">30km 拖吊服務</span></td>
                                     <td class="p-4 text-center italic text-gray-300">自費</td>
-                                    <td class="p-4 text-center text-orange-600 italic">免費諮詢</td>
+                                    <td class="p-4 text-center text-orange-600 font-bold italic">免費諮詢</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -268,25 +308,25 @@
                 <!-- 訂閱卡片區 -->
                 <div class="space-y-4">
                     <div class="text-center py-2">
-                        <h2 class="text-xl font-black text-gray-800 tracking-tight">立即升級 PRO 計劃</h2>
-                        <p class="text-slate-400 text-xs font-medium italic">每月點數自動續訂，隨時可取消</p>
+                        <h2 class="text-xl font-black text-gray-800 tracking-tight text-center">立即升級 PRO 應援經典賽</h2>
+                        <p class="text-slate-400 text-xs font-medium italic">Hami Point 專屬點數支付優惠</p>
                     </div>
 
                     <div class="bg-white rounded-[40px] overflow-hidden shadow-2xl border-2 border-orange-500 relative">
                         <div class="bg-hami text-white py-2.5 text-center text-[10px] font-black tracking-[0.3em] uppercase">
-                            Hami Exclusive Offer
+                            Hami Exclusive Point Price
                         </div>
                         <div class="p-8">
                             <div class="flex justify-between items-start mb-8">
                                 <div>
-                                    <h3 class="text-xl font-black text-gray-800">PRO 會籍訂閱</h3>
+                                    <h3 class="text-xl font-black text-gray-800">PRO 月租計劃</h3>
                                     <div class="bg-orange-100 text-orange-600 text-[10px] font-bold px-2 py-0.5 rounded mt-1.5 inline-block border border-orange-200 shadow-sm">
                                         點數支付享 8 折
                                     </div>
                                 </div>
                                 <div class="text-right">
                                     <div class="flex items-baseline justify-end gap-1">
-                                        <span class="text-4xl font-black text-orange-500 tracking-tighter">120</span>
+                                        <span class="text-4xl font-black text-orange-500 tracking-tighter font-serif italic">120</span>
                                         <span class="text-sm font-bold text-orange-500">P</span>
                                     </div>
                                     <div class="text-gray-300 text-[10px] line-through">原價 149 P / 月</div>
@@ -296,31 +336,47 @@
                             <div class="space-y-5 mb-10">
                                 <div class="flex gap-4 items-center">
                                     <div class="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center shrink-0 border border-orange-50 shadow-sm">
-                                        <i data-lucide="zap" class="w-4 h-4" fill="currentColor"></i>
+                                        <i data-lucide="fuel" class="w-4 h-4"></i>
                                     </div>
-                                    <p class="text-xs font-black text-gray-700">加油每公升加碼贈 0.5 點</p>
+                                    <p class="text-xs font-black text-gray-700 tracking-tight">中油/台塑加油回饋翻倍最高 2P/升</p>
                                 </div>
                                 <div class="flex gap-4 items-center">
                                     <div class="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center shrink-0 border border-orange-50 shadow-sm">
-                                        <i data-lucide="map" class="w-4 h-4"></i>
+                                        <i data-lucide="map-pin" class="w-4 h-4"></i>
                                     </div>
-                                    <p class="text-xs font-black text-gray-700">全台逾 3,000 處停車 95 折</p>
+                                    <p class="text-xs font-black text-gray-700 tracking-tight">全台 3,000+ 停車場不限次數 95 折</p>
                                 </div>
                                 <div class="flex gap-4 items-center">
                                     <div class="w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center shrink-0 border border-orange-50 shadow-sm">
                                         <i data-lucide="repeat" class="w-4 h-4"></i>
                                     </div>
-                                    <p class="text-xs font-black text-gray-700">點數自動續訂，隨時取消</p>
+                                    <p class="text-xs font-black text-gray-700 tracking-tight">點數自動續訂，享 WBC 抽獎資格</p>
                                 </div>
                             </div>
 
-                            <button onclick="simulateToast('訂閱處理中...請稍候')" class="w-full bg-hami text-white font-black py-4 rounded-3xl shadow-lg shadow-orange-100 flex items-center justify-center gap-2 btn-press transition-transform">
+                            <button onclick="simulateToast('WBC 限定訂閱處理中...')" class="w-full bg-hami text-white font-black py-4 rounded-3xl shadow-lg shadow-orange-100 flex items-center justify-center gap-2 btn-press transition-transform">
                                 使用 Hami Point 訂閱
-                                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                                <i data-lucide="chevron-right" class="w-5 h-5"></i>
                             </button>
                         </div>
                     </div>
                 </div>
+
+                <!-- 為什麼加入 autopass? -->
+                <div class="bg-blue-600 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl border border-blue-500">
+                    <div class="relative z-10">
+                        <h4 class="font-black text-sm mb-2 italic uppercase">Why autopass?</h4>
+                        <p class="text-[10px] text-blue-100 leading-relaxed opacity-80 mb-4 font-medium">
+                            autopass 是全台領先的行車支付平台，連結全台數千站點。結合 Hami Point 生態圈，讓您的每一公里行程都能轉化為更有價值的回饋。
+                        </p>
+                        <div class="flex items-center gap-2 text-[9px] font-black uppercase tracking-wider">
+                            <span class="bg-white/20 px-2 py-1 rounded shadow-sm">多場景通用</span>
+                            <span class="bg-white/20 px-2 py-1 rounded shadow-sm">點數 1:1 折抵</span>
+                        </div>
+                    </div>
+                    <i data-lucide="zap" class="absolute -right-4 -bottom-4 w-24 h-24 text-white/10 rotate-12"></i>
+                </div>
+
             </div>
 
         </main>
@@ -332,7 +388,7 @@
                     <span class="text-[8px] text-gray-400 font-black uppercase tracking-[0.1em]">Current Status</span>
                     <div class="flex items-center gap-1.5 mt-0.5">
                         <div id="footer-dot" class="w-2 h-2 rounded-full bg-gray-200"></div>
-                        <span id="footer-text" class="text-xs font-black text-gray-700 italic">尚未綁定愛車</span>
+                        <span id="footer-text" class="text-xs font-black text-gray-700 italic tracking-tight">尚未綁定愛車</span>
                     </div>
                 </div>
                 <button id="footer-btn" onclick="showSection('bind')" class="bg-hami text-white shadow-lg shadow-orange-100 px-8 py-3 rounded-2xl text-xs font-black btn-press transition-all">
