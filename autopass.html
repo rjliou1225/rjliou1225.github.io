@@ -133,7 +133,7 @@
             <div id="section-bind" class="space-y-6 animate-fade-in">
                 <div id="bind-card" class="bg-white rounded-3xl p-6 shadow-sm border border-gray-100">
                     <div class="flex items-center justify-between mb-6">
-                        <h2 class="text-lg font-black text-gray-800">車籍與支付設定</h2>
+                        <h2 class="text-lg font-black text-gray-800">服務綁定與設定</h2>
                         <span class="text-[10px] font-bold text-orange-500 bg-orange-50 px-2 py-1 rounded">綁定贈 50P</span>
                     </div>
                     
@@ -160,7 +160,7 @@
 
                         <!-- 信用卡輸入區 -->
                         <div class="space-y-4 border-t border-gray-50 pt-6">
-                            <label class="block text-[10px] font-bold text-gray-400 mb-1 ml-1 uppercase tracking-widest">信用卡資訊</label>
+                            <label class="block text-[10px] font-bold text-gray-400 mb-1 ml-1 uppercase tracking-widest text-left">信用卡與支付資訊</label>
                             <div class="space-y-3">
                                 <div class="relative">
                                     <input type="text" placeholder="卡號 0000 0000 0000 0000" class="w-full bg-slate-50 border-2 border-gray-100 rounded-xl px-4 py-3 text-sm font-bold focus:border-orange-500 focus:bg-white outline-none transition-all">
@@ -170,16 +170,30 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-3">
                                     <input type="text" placeholder="有效月年 MM/YY" class="w-full bg-slate-50 border-2 border-gray-100 rounded-xl px-4 py-3 text-sm font-bold focus:border-orange-500 focus:bg-white outline-none transition-all">
-                                    <input type="text" placeholder="安全碼 CVV" class="w-full bg-slate-50 border-2 border-gray-100 rounded-xl px-4 py-3 text-sm font-bold focus:border-orange-500 focus:bg-white outline-none transition-all">
+                                    <input type="password" placeholder="安全碼 CVV" class="w-full bg-slate-50 border-2 border-gray-100 rounded-xl px-4 py-3 text-sm font-bold focus:border-orange-500 focus:bg-white outline-none transition-all">
                                 </div>
                             </div>
                             <!-- 聯名卡回饋提示 -->
-                            <div class="bg-orange-50 rounded-xl p-3 border border-orange-100 flex items-start gap-2">
+                            <div class="bg-orange-50 rounded-xl p-3 border border-orange-100 flex items-start gap-2 shadow-sm">
                                 <i data-lucide="sparkles" class="w-4 h-4 text-orange-500 shrink-0 mt-0.5"></i>
                                 <p class="text-[10px] text-orange-700 font-bold leading-relaxed">
                                     使用「中華電信聯名卡」綁定，筆筆扣款享最高 <span class="text-lg">3%</span> Hami Point 回饋無上限！
                                 </p>
                             </div>
+                        </div>
+
+                        <!-- 電子發票載具區 (新功能) -->
+                        <div class="space-y-4 border-t border-gray-50 pt-6">
+                            <label class="block text-[10px] font-bold text-gray-400 mb-1 ml-1 uppercase tracking-widest">電子發票載具</label>
+                            <div class="relative">
+                                <input id="carrierInput" type="text" placeholder="輸入手機條碼 如：/ABC1234" class="w-full bg-slate-50 border-2 border-gray-100 rounded-xl px-4 py-3 text-sm font-bold focus:border-orange-500 focus:bg-white outline-none transition-all placeholder:text-gray-300 shadow-inner" oninput="this.value = this.value.toUpperCase()">
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2">
+                                    <i data-lucide="smartphone" class="w-4 h-4 text-gray-300"></i>
+                                </div>
+                            </div>
+                            <p class="text-[9px] text-gray-400 px-1 font-medium italic">
+                                * 設定後，加油與停車發票將自動存入您的雲端載具。
+                            </p>
                         </div>
 
                         <!-- 點數折抵選擇器 -->
@@ -224,7 +238,7 @@
                         <i data-lucide="clock" class="w-4 h-4 text-orange-500"></i>
                         點數折抵：<span id="displayPointStatus" class="text-orange-600">已開啟</span>
                     </div>
-                    <button onclick="resetUI()" class="block mx-auto text-xs font-bold text-gray-300 hover:text-orange-500 uppercase tracking-widest">修改車籍資料</button>
+                    <button onclick="resetUI()" class="block mx-auto text-xs font-bold text-gray-300 hover:text-orange-500 uppercase tracking-widest transition-colors">修改車籍與支付資訊</button>
                 </div>
             </div>
 
@@ -235,10 +249,10 @@
                 <div class="bg-gradient-to-r from-blue-700 to-blue-500 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl border border-blue-400">
                     <div class="relative z-10">
                         <div class="flex items-center gap-2 mb-3">
-                            <span class="bg-wbc text-white text-[10px] font-black px-2 py-0.5 rounded badge-pulse">WBC 2026</span>
+                            <span class="bg-wbc text-white text-[10px] font-black px-2 py-0.5 rounded badge-pulse shadow-sm">WBC 2026</span>
                             <span class="text-xs font-bold opacity-90 uppercase tracking-widest">Limited Edition</span>
                         </div>
-                        <h3 class="text-xl font-black mb-2">升級 PRO 應援經典賽</h3>
+                        <h3 class="text-xl font-black mb-2 leading-tight">升級 PRO 應援經典賽</h3>
                         <p class="text-[11px] text-blue-50 leading-relaxed font-medium opacity-90 mb-4">
                             訂閱 PRO 會籍，不只享行車優惠，完成首筆扣款再抽 WBC 限量版棒球與經典賽周邊！
                         </p>
@@ -252,7 +266,7 @@
                         </div>
                     </div>
                     <i data-lucide="trophy" class="absolute -right-4 -bottom-4 w-28 h-28 text-white/10 rotate-12"></i>
-                </div>
+                </header>
 
                 <!-- autopass 會員制詳細對照 -->
                 <div class="space-y-4">
@@ -306,9 +320,9 @@
                 </div>
 
                 <!-- 訂閱卡片區 -->
-                <div class="space-y-4">
+                <div class="space-y-4 pb-12">
                     <div class="text-center py-2">
-                        <h2 class="text-xl font-black text-gray-800 tracking-tight text-center">立即升級 PRO 應援經典賽</h2>
+                        <h2 class="text-xl font-black text-gray-800 tracking-tight text-center font-bold">立即升級 PRO 應援經典賽</h2>
                         <p class="text-slate-400 text-xs font-medium italic">Hami Point 專屬點數支付優惠</p>
                     </div>
 
@@ -319,7 +333,7 @@
                         <div class="p-8">
                             <div class="flex justify-between items-start mb-8">
                                 <div>
-                                    <h3 class="text-xl font-black text-gray-800">PRO 月租計劃</h3>
+                                    <h3 class="text-xl font-black text-gray-800 font-bold">PRO 月租計劃</h3>
                                     <div class="bg-orange-100 text-orange-600 text-[10px] font-bold px-2 py-0.5 rounded mt-1.5 inline-block border border-orange-200 shadow-sm">
                                         點數支付享 8 折
                                     </div>
@@ -363,9 +377,9 @@
                 </div>
 
                 <!-- 為什麼加入 autopass? -->
-                <div class="bg-blue-600 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl border border-blue-500">
+                <div class="bg-blue-600 rounded-3xl p-6 text-white relative overflow-hidden shadow-xl border border-blue-500 mb-8">
                     <div class="relative z-10">
-                        <h4 class="font-black text-sm mb-2 italic uppercase">Why autopass?</h4>
+                        <h4 class="font-black text-sm mb-2 italic uppercase font-bold">Why autopass?</h4>
                         <p class="text-[10px] text-blue-100 leading-relaxed opacity-80 mb-4 font-medium">
                             autopass 是全台領先的行車支付平台，連結全台數千站點。結合 Hami Point 生態圈，讓您的每一公里行程都能轉化為更有價值的回饋。
                         </p>
@@ -454,6 +468,7 @@
         function handleBind() {
             const plate = document.getElementById('plateInput').value.trim();
             const isPointEnabled = document.getElementById('pointToggle').checked;
+            const carrier = document.getElementById('carrierInput').value.trim();
 
             if (plate.length < 5) {
                 simulateToast("請輸入完整的車牌號碼");
@@ -477,7 +492,10 @@
             document.getElementById('footer-btn').innerText = "服務運作中";
             document.getElementById('footer-btn').onclick = null;
 
-            simulateToast("綁定成功！" + (isPointEnabled ? "已啟用點數折抵" : ""));
+            let successMsg = "綁定成功！" + (isPointEnabled ? "已啟用點數折抵" : "");
+            if (carrier) successMsg += "，載具設定完成";
+            
+            simulateToast(successMsg);
         }
 
         // 重置 UI
@@ -485,6 +503,7 @@
             document.getElementById('bind-card').classList.remove('hidden');
             document.getElementById('success-card').classList.add('hidden');
             document.getElementById('plateInput').value = "";
+            document.getElementById('carrierInput').value = "";
             
             document.getElementById('footer-dot').className = "w-2 h-2 rounded-full bg-gray-200";
             document.getElementById('footer-text').innerText = "尚未綁定愛車";
@@ -498,9 +517,11 @@
             const toast = document.getElementById('toast');
             toast.innerText = msg;
             toast.style.opacity = "1";
+            toast.style.pointerEvents = "auto";
             setTimeout(() => {
                 toast.style.opacity = "0";
-            }, 2500);
+                toast.style.pointerEvents = "none";
+            }, 3000);
         }
     </script>
 </body>
