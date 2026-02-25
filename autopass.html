@@ -1,293 +1,349 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Car, 
-  CreditCard, 
-  Coins, 
-  CheckCircle2, 
-  ChevronRight, 
-  Zap, 
-  MapPin, 
-  Fuel, 
-  ShieldCheck,
-  Star,
-  BellRing,
-  Info,
-  Clock,
-  ArrowRight
-} from 'lucide-react';
-
-const App = () => {
-  // UI 狀態管理 (純前端邏輯)
-  const [activeTab, setActiveTab] = useState('binding'); 
-  const [plate, setPlate] = useState('');
-  const [isAgreed, setIsAgreed] = useState(true);
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [points, setPoints] = useState(1250);
-
-  // 模擬綁定動作
-  const handleBinding = () => {
-    if (plate.length < 5) {
-      alert("請輸入正確的車牌號碼");
-      return;
-    }
-    setIsSuccess(true);
-    // 3秒後恢復原狀，僅作展示
-    setTimeout(() => setIsSuccess(false), 5000);
-  };
-
-  const brands = {
-    primary: 'bg-[#F47920]', // Hami Orange
-    primaryText: 'text-[#F47920]',
-    primaryHover: 'hover:bg-[#E66A10]',
-    secondary: 'bg-[#0070FF]', // autopass Blue
-    accent: 'text-[#F47920]',
-    lightBg: 'bg-orange-50'
-  };
-
-  return (
-    <div className="min-h-screen bg-[#F8FAFC] font-sans text-slate-800 pb-20">
-      {/* 頂部導覽列 */}
-      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
-        <div className="max-w-xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={`${brands.primary} px-2 py-1 rounded text-white font-black text-xs`}>Hami</div>
-            <div className="h-4 w-px bg-slate-200 mx-1"></div>
-            <div className="font-bold text-lg tracking-tighter text-[#0070FF]">autopass</div>
-          </div>
-          <div className="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
-            <Coins size={14} className="text-orange-500" />
-            <span className="text-sm font-bold">{points.toLocaleString()} <span className="text-[10px] font-normal opacity-60">P</span></span>
-          </div>
-        </div>
-      </header>
-
-      {/* 主視覺區 */}
-      <section className={`${brands.primary} text-white pt-10 pb-16 px-6 relative overflow-hidden`}>
-        <div className="max-w-xl mx-auto relative z-10">
-          <div className="inline-flex items-center gap-2 bg-black/10 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold mb-4 tracking-widest uppercase">
-            Smart Driving Life
-          </div>
-          <h1 className="text-3xl font-black mb-3 leading-tight">
-            開車不掏卡<br />點數自動抵
-          </h1>
-          <p className="text-orange-100 text-sm opacity-90 max-w-[240px]">
-            全台加油、停車即享自動扣款，每一公里都在賺回饋。
-          </p>
-        </div>
-        {/* 裝飾背影 */}
-        <Car size={180} className="absolute -right-10 bottom-4 text-white/10 rotate-[-10deg]" />
-      </section>
-
-      {/* 功能主要區域 */}
-      <main className="max-w-xl mx-auto px-6 -mt-8 relative z-20">
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Point x autopass 智慧出行</title>
+    <!-- 載入 Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
         
-        {/* 切換分頁 */}
-        <div className="bg-white p-1.5 rounded-2xl shadow-xl shadow-slate-200/50 flex mb-8 border border-slate-100">
-          <button 
-            onClick={() => { setActiveTab('binding'); setIsSuccess(false); }}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all ${activeTab === 'binding' ? brands.primary + ' text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
-          >
-            <CreditCard size={18} />
-            車牌綁定
-          </button>
-          <button 
-            onClick={() => { setActiveTab('subscription'); setIsSuccess(false); }}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all ${activeTab === 'subscription' ? brands.primary + ' text-white shadow-lg' : 'text-slate-400 hover:text-slate-600'}`}
-          >
-            <Star size={18} />
-            會籍訂閱
-          </button>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #F8FAFC;
+        }
+
+        .hami-orange { background-color: #F47920; }
+        .hami-orange-text { color: #F47920; }
+        .autopass-blue { color: #0070FF; }
+
+        /* 動畫效果 */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-active {
+            background-color: #F47920;
+            color: white;
+            box-shadow: 0 4px 12px rgba(244, 121, 32, 0.2);
+        }
+
+        /* 隱藏元素 */
+        .hidden-section { display: none; }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- 頂部導覽列 -->
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="hami-orange px-2 py-1 rounded text-white font-black text-xs uppercase">Hami</div>
+                <div class="h-4 w-px bg-slate-200 mx-1"></div>
+                <div class="font-bold text-lg tracking-tighter autopass-blue">autopass</div>
+            </div>
+            <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
+                <i data-lucide="coins" class="w-4 h-4 text-orange-500"></i>
+                <span class="text-sm font-bold">1,250 <span class="text-[10px] font-normal opacity-60">P</span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主視覺區 -->
+    <section class="hami-orange text-white pt-10 pb-16 px-6 relative overflow-hidden">
+        <div class="max-w-xl mx-auto relative z-10">
+            <div class="inline-flex items-center gap-2 bg-black/10 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-bold mb-4 tracking-widest uppercase">
+                Smart Driving Life
+            </div>
+            <h1 class="text-3xl font-black mb-3 leading-tight">
+                開車不掏卡<br>點數自動抵
+            </h1>
+            <p class="text-orange-100 text-sm opacity-90 max-w-[240px]">
+                全台加油、停車即享自動扣款，每一公里都在賺回饋。
+            </p>
+        </div>
+        <!-- 裝飾背景圖標 -->
+        <div class="absolute -right-10 bottom-4 text-white/10 opacity-30 transform -rotate-12">
+            <i data-lucide="car" style="width: 180px; height: 180px;"></i>
+        </div>
+    </section>
+
+    <!-- 功能主要區域 -->
+    <main class="max-w-xl mx-auto px-6 -mt-8 relative z-20">
+        
+        <!-- 分頁切換器 -->
+        <div class="bg-white p-1.5 rounded-2xl shadow-xl shadow-slate-200/50 flex mb-8 border border-slate-100">
+            <button id="tab-binding" onclick="switchTab('binding')" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all tab-active">
+                <i data-lucide="credit-card" class="w-4 h-4"></i>
+                車牌綁定
+            </button>
+            <button id="tab-subscription" onclick="switchTab('subscription')" class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all text-slate-400 hover:text-slate-600">
+                <i data-lucide="star" class="w-4 h-4"></i>
+                會籍訂閱
+            </button>
         </div>
 
-        {/* 分頁內容: 車牌綁定 */}
-        {activeTab === 'binding' && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-            {!isSuccess ? (
-              <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg font-black">綁定您的愛車</h2>
-                  <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold uppercase">Step 01</span>
+        <!-- 內容區：車牌綁定 -->
+        <div id="section-binding" class="fade-in space-y-6">
+            <!-- 綁定表單 -->
+            <div id="binding-form-box" class="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-lg font-black text-slate-800">綁定您的愛車</h2>
+                    <span class="text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold uppercase tracking-wider">Step 01</span>
                 </div>
                 
-                <div className="space-y-5">
-                  <div className="relative">
-                    <label className="block text-[10px] font-bold text-slate-400 mb-1.5 ml-1 uppercase">車牌號碼</label>
-                    <input 
-                      type="text" 
-                      placeholder="如：ABC-1234"
-                      value={plate}
-                      onChange={(e) => setPlate(e.target.value.toUpperCase())}
-                      className="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-2xl font-black placeholder:text-slate-200 focus:border-orange-500 focus:bg-white focus:outline-none transition-all"
-                    />
-                    <div className="absolute right-4 bottom-4 text-slate-300">
-                      <Car size={24} />
+                <div class="space-y-5">
+                    <div class="relative">
+                        <label class="block text-[10px] font-bold text-slate-400 mb-1.5 ml-1 uppercase">車牌號碼</label>
+                        <input 
+                            id="plate-input"
+                            type="text" 
+                            placeholder="如：ABC-1234"
+                            oninput="this.value = this.value.toUpperCase()"
+                            class="w-full bg-slate-50 border-2 border-slate-100 rounded-2xl px-5 py-4 text-2xl font-black placeholder:text-slate-200 focus:border-orange-500 focus:bg-white focus:outline-none transition-all uppercase"
+                        >
+                        <div class="absolute right-4 bottom-4 text-slate-300">
+                            <i data-lucide="car" class="w-6 h-6"></i>
+                        </div>
                     </div>
-                  </div>
 
-                  <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <input 
-                      type="checkbox" 
-                      checked={isAgreed} 
-                      onChange={() => setIsAgreed(!isAgreed)}
-                      className="mt-1 w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500"
-                    />
-                    <div className="text-xs text-slate-500 leading-relaxed">
-                      同意開啟 <span className="font-bold text-slate-700">Hami Point 自動折抵</span>。系統將於支付時優先使用點數，不足額部分再由中華電信帳單扣款。
+                    <div class="flex items-start gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <input type="checkbox" checked class="mt-1 w-4 h-4 rounded border-slate-300 text-orange-500 focus:ring-orange-500">
+                        <div class="text-xs text-slate-500 leading-relaxed">
+                            同意開啟 <span class="font-bold text-slate-700">Hami Point 自動折抵</span>。系統將於支付時優先使用點數，不足額部分再由電信帳單扣款。
+                        </div>
                     </div>
-                  </div>
 
-                  <button 
-                    onClick={handleBinding}
-                    className={`w-full ${brands.primary} text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-200 flex items-center justify-center gap-2 active:scale-[0.98] transition-all`}
-                  >
-                    立即綁定並開啟服務
-                    <ArrowRight size={18} />
-                  </button>
+                    <button 
+                        onclick="processBinding()"
+                        class="w-full hami-orange text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-100 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                    >
+                        立即綁定並開啟服務
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </button>
                 </div>
-              </div>
-            ) : (
-              <div className="bg-white rounded-3xl p-10 shadow-sm border border-slate-100 text-center animate-in zoom-in-95">
-                <div className="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <CheckCircle2 size={48} strokeWidth={3} />
-                </div>
-                <h2 className="text-2xl font-black mb-2">綁定成功！</h2>
-                <p className="text-slate-500 text-sm mb-6">您的車牌 <span className="text-slate-800 font-bold">{plate}</span> 已完成授權<br />現在起，加油停車免動手。</p>
-                <div className="bg-slate-50 rounded-2xl p-4 inline-flex items-center gap-3 text-xs font-bold text-slate-600">
-                  <Clock size={14} />
-                  點數自動折抵：已開啟
-                </div>
-              </div>
-            )}
-
-            {/* 功能卡片 */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white p-5 rounded-2xl border border-slate-100">
-                <div className="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-3">
-                  <Fuel size={20} />
-                </div>
-                <div className="text-sm font-black mb-1">加油免掃碼</div>
-                <div className="text-[10px] text-slate-400">全台逾 500 站合作油站</div>
-              </div>
-              <div className="bg-white p-5 rounded-2xl border border-slate-100">
-                <div className="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-3">
-                  <MapPin size={20} />
-                </div>
-                <div className="text-sm font-black mb-1">停車自動付</div>
-                <div className="text-[10px] text-slate-400">公有、路外停車皆支援</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 分頁內容: 會籍訂閱 */}
-        {activeTab === 'subscription' && (
-          <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4">
-            <div className="text-center py-4">
-              <h2 className="text-2xl font-black mb-1">升級麻吉付 PRO</h2>
-              <p className="text-slate-400 text-xs">中華電信會員獨享點數訂閱優惠</p>
             </div>
 
-            <div className="bg-white rounded-[32px] overflow-hidden shadow-xl border-2 border-[#F47920] relative">
-              <div className={`${brands.primary} text-white py-2 text-center text-[10px] font-black tracking-[0.2em]`}>
-                MOST POPULAR
-              </div>
-              <div className="p-8">
-                <div className="flex justify-between items-start mb-8">
-                  <div>
-                    <h3 className="text-xl font-black">PRO 月租計劃</h3>
-                    <p className="text-slate-400 text-[10px] mt-1 italic">自動續訂，隨時取消</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="flex items-center justify-end gap-1">
-                      <span className="text-3xl font-black text-orange-500">120</span>
-                      <span className="text-sm font-bold text-orange-500">P</span>
-                    </div>
-                    <div className="text-slate-300 text-xs line-through tracking-tighter">原價 149 P / 月</div>
-                  </div>
+            <!-- 成功狀態 (預設隱藏) -->
+            <div id="binding-success-box" class="hidden-section bg-white rounded-3xl p-10 shadow-sm border border-slate-100 text-center fade-in">
+                <div class="w-20 h-20 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="check-circle-2" class="w-12 h-12" stroke-width="3"></i>
                 </div>
-
-                <div className="space-y-4 mb-10">
-                  {[
-                    { t: "加油回饋", d: "每公升加碼 0.5 點 Hami Point" },
-                    { t: "停車優惠", d: "全台特約停車場 95 折" },
-                    { t: "代繳福利", d: "每月 2 次路邊停車免手續費" },
-                    { t: "道路救援", d: "享 30 公里免費道路救援 (年資達標)" }
-                  ].map((item, i) => (
-                    <div key={i} className="flex gap-3">
-                      <div className="bg-orange-100 text-orange-600 rounded-full p-1 h-5 w-5 flex-shrink-0 flex items-center justify-center">
-                        <CheckCircle2 size={12} strokeWidth={3} />
-                      </div>
-                      <div>
-                        <div className="text-xs font-black text-slate-700">{item.t}</div>
-                        <div className="text-[10px] text-slate-400">{item.d}</div>
-                      </div>
-                    </div>
-                  ))}
+                <h2 class="text-2xl font-black mb-2 text-slate-800">綁定成功！</h2>
+                <p class="text-slate-500 text-sm mb-6">您的車牌 <span id="display-plate" class="text-slate-800 font-bold">---</span> 已完成授權<br>現在起，加油停車免動手。</p>
+                <div class="bg-slate-50 rounded-2xl p-4 inline-flex items-center gap-3 text-xs font-bold text-slate-600">
+                    <i data-lucide="clock" class="w-4 h-4"></i>
+                    點數自動折抵：服務已生效
                 </div>
-
-                <button className={`w-full ${brands.primary} text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-100 flex items-center justify-center gap-2`}>
-                  使用點數支付
-                  <ChevronRight size={18} />
-                </button>
-              </div>
+                <button onclick="resetBinding()" class="block mx-auto mt-6 text-xs font-bold text-slate-300 hover:text-orange-500">重新綁定車牌</button>
             </div>
 
-            {/* 安全資訊區 */}
-            <div className="bg-slate-100 rounded-2xl p-5 flex items-center justify-between border border-slate-200">
-              <div className="flex items-center gap-3">
-                <div className="bg-white p-2 rounded-lg shadow-sm">
-                  <ShieldCheck size={18} className="text-blue-600" />
+            <!-- 功能簡介卡片 -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-3">
+                        <i data-lucide="fuel" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-sm font-black mb-1">加油免掃碼</div>
+                    <div class="text-[10px] text-slate-400">全台逾 500 站合作油站</div>
                 </div>
-                <div className="text-[10px] font-bold text-slate-500">
-                  <p>HTTPS 加密傳輸</p>
-                  <p className="opacity-60">由 中華電信 x 車麻吉 提供服務</p>
+                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+                    <div class="w-10 h-10 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center mb-3">
+                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-sm font-black mb-1">停車自動付</div>
+                    <div class="text-[10px] text-slate-400">路邊、路外停車皆支援</div>
                 </div>
-              </div>
-              <Info size={16} className="text-slate-300" />
             </div>
-          </div>
-        )}
-
-        {/* 底部合作標誌區 */}
-        <div className="mt-16 text-center">
-          <div className="h-px bg-slate-200 w-full mb-8 relative">
-            <span className="absolute left-1/2 -translate-x-1/2 -top-2 bg-[#F8FAFC] px-4 text-[10px] font-bold text-slate-300 tracking-widest uppercase">Ecosystem Partners</span>
-          </div>
-          <div className="grid grid-cols-4 gap-y-6 gap-x-4 grayscale opacity-40">
-            <div className="text-[10px] font-black">CPC 中油</div>
-            <div className="text-[10px] font-black">FPCC 台塑</div>
-            <div className="text-[10px] font-black">iParking</div>
-            <div className="text-[10px] font-black">DODOBIRD</div>
-            <div className="text-[10px] font-black">嘟嘟房</div>
-            <div className="text-[10px] font-black">台灣聯通</div>
-            <div className="text-[10px] font-black">VIVIPARK</div>
-            <div className="text-[10px] font-black">歐特儀</div>
-          </div>
         </div>
 
-      </main>
-
-      {/* 底部導引列 (手機端固定) */}
-      <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-slate-100 p-4 md:hidden">
-        <div className="max-w-xl mx-auto flex items-center justify-between px-2">
-          <div className="flex flex-col">
-            <span className="text-[9px] text-slate-400 font-black uppercase tracking-tighter">Current Status</span>
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <div className={`w-2 h-2 rounded-full ${plate ? 'bg-green-500 animate-pulse' : 'bg-slate-200'}`}></div>
-              <span className="text-xs font-bold text-slate-700">{plate ? `已就緒: ${plate}` : '尚未綁定車牌'}</span>
+        <!-- 內容區：會籍訂閱 -->
+        <div id="section-subscription" class="hidden-section fade-in space-y-6">
+            <div class="text-center py-4">
+                <h2 class="text-2xl font-black mb-1 text-slate-800">升級麻吉付 PRO</h2>
+                <p class="text-slate-400 text-xs">中華電信會員獨享點數訂閱優惠</p>
             </div>
-          </div>
-          <button 
-            disabled={!!plate}
-            onClick={() => { setActiveTab('binding'); window.scrollTo({top: 0, behavior: 'smooth'}); }}
-            className={`${plate ? 'bg-slate-100 text-slate-400' : brands.primary + ' text-white shadow-lg'} px-6 py-2.5 rounded-full text-xs font-bold transition-all`}
-          >
-            {plate ? '已綁定' : '立即開始'}
-          </button>
-        </div>
-      </footer>
-    </div>
-  );
-};
 
-export default App;
+            <div class="bg-white rounded-[32px] overflow-hidden shadow-xl border-2 border-[#F47920] relative">
+                <div class="hami-orange text-white py-2 text-center text-[10px] font-black tracking-[0.2em]">
+                    MOST POPULAR
+                </div>
+                <div class="p-8">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h3 class="text-xl font-black text-slate-800">PRO 月租計劃</h3>
+                            <p class="text-slate-400 text-[10px] mt-1 italic">自動續訂，隨時取消</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="flex items-center justify-end gap-1">
+                                <span class="text-3xl font-black text-orange-500">120</span>
+                                <span class="text-sm font-bold text-orange-500">P</span>
+                            </div>
+                            <div class="text-slate-300 text-xs line-through tracking-tighter">原價 149 P / 月</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 mb-10">
+                        <div class="flex gap-3">
+                            <div class="bg-orange-100 text-orange-600 rounded-full p-1 h-5 w-5 flex-shrink-0 flex items-center justify-center">
+                                <i data-lucide="check-circle-2" class="w-3 h-3" stroke-width="3"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-slate-700">加油回饋</div>
+                                <div class="text-[10px] text-slate-400">每公升加碼 0.5 點 Hami Point</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="bg-orange-100 text-orange-600 rounded-full p-1 h-5 w-5 flex-shrink-0 flex items-center justify-center">
+                                <i data-lucide="check-circle-2" class="w-3 h-3" stroke-width="3"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-slate-700">停車優惠</div>
+                                <div class="text-[10px] text-slate-400">全台特約停車場 95 折</div>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <div class="bg-orange-100 text-orange-600 rounded-full p-1 h-5 w-5 flex-shrink-0 flex items-center justify-center">
+                                <i data-lucide="check-circle-2" class="w-3 h-3" stroke-width="3"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-black text-slate-700">代繳福利</div>
+                                <div class="text-[10px] text-slate-400">每月 2 次路邊停車免手續費</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="w-full hami-orange text-white font-bold py-4 rounded-2xl shadow-lg shadow-orange-100 flex items-center justify-center gap-2">
+                        使用點數支付
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-slate-100 rounded-2xl p-5 flex items-center justify-between border border-slate-200">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white p-2 rounded-lg shadow-sm">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-blue-600"></i>
+                    </div>
+                    <div class="text-[10px] font-bold text-slate-500 leading-tight">
+                        <p>HTTPS 加密傳輸</p>
+                        <p class="opacity-60">由 中華電信 x 車麻吉 提供服務</p>
+                    </div>
+                </div>
+                <i data-lucide="info" class="w-4 h-4 text-slate-300"></i>
+            </div>
+        </div>
+
+        <!-- 底部合作商 -->
+        <div class="mt-16 text-center">
+            <div class="h-px bg-slate-200 w-full mb-8 relative">
+                <span class="absolute left-1/2 -translate-x-1/2 -top-2 bg-[#F8FAFC] px-4 text-[10px] font-bold text-slate-300 tracking-widest uppercase">Ecosystem Partners</span>
+            </div>
+            <div class="grid grid-cols-4 gap-y-6 gap-x-4 grayscale opacity-40">
+                <div class="text-[10px] font-black">CPC 中油</div>
+                <div class="text-[10px] font-black">FPCC 台塑</div>
+                <div class="text-[10px] font-black">iParking</div>
+                <div class="text-[10px] font-black">嘟嘟房</div>
+                <div class="text-[10px] font-black">台灣聯通</div>
+                <div class="text-[10px] font-black">VIVIPARK</div>
+                <div class="text-[10px] font-black">歐特儀</div>
+                <div class="text-[10px] font-black">全國加油站</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- 底部固定的狀態欄 (手機端優化) -->
+    <footer id="mobile-footer" class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-slate-100 p-4 lg:hidden">
+        <div class="max-w-xl mx-auto flex items-center justify-between px-2">
+            <div class="flex flex-col">
+                <span class="text-[9px] text-slate-400 font-black uppercase tracking-tighter">Current Status</span>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                    <div id="status-dot" class="w-2 h-2 rounded-full bg-slate-200"></div>
+                    <span id="status-text" class="text-xs font-bold text-slate-700">尚未綁定車牌</span>
+                </div>
+            </div>
+            <button 
+                id="footer-action-btn"
+                onclick="switchTab('binding'); window.scrollTo({top: 0, behavior: 'smooth'});"
+                class="hami-orange text-white shadow-lg px-6 py-2.5 rounded-full text-xs font-bold transition-all"
+            >
+                立即開始
+            </button>
+        </div>
+    </footer>
+
+    <script>
+        // 初始化 Lucide 圖標
+        lucide.createIcons();
+
+        // 切換分頁邏輯
+        function switchTab(tab) {
+            const btnBinding = document.getElementById('tab-binding');
+            const btnSubscription = document.getElementById('tab-subscription');
+            const secBinding = document.getElementById('section-binding');
+            const secSubscription = document.getElementById('section-subscription');
+
+            if (tab === 'binding') {
+                btnBinding.classList.add('tab-active');
+                btnBinding.classList.remove('text-slate-400');
+                btnSubscription.classList.remove('tab-active');
+                btnSubscription.classList.add('text-slate-400');
+                
+                secBinding.classList.remove('hidden-section');
+                secSubscription.classList.add('hidden-section');
+            } else {
+                btnSubscription.classList.add('tab-active');
+                btnSubscription.classList.remove('text-slate-400');
+                btnBinding.classList.remove('tab-active');
+                btnBinding.classList.add('text-slate-400');
+                
+                secSubscription.classList.remove('hidden-section');
+                secBinding.classList.add('hidden-section');
+            }
+        }
+
+        // 綁定處理邏輯
+        function processBinding() {
+            const plate = document.getElementById('plate-input').value.trim();
+            if (plate.length < 5) {
+                alert("請輸入正確的車牌號碼");
+                return;
+            }
+
+            // 更新 UI 狀態
+            document.getElementById('display-plate').innerText = plate;
+            document.getElementById('binding-form-box').classList.add('hidden-section');
+            document.getElementById('binding-success-box').classList.remove('hidden-section');
+
+            // 更新底部狀態欄
+            document.getElementById('status-dot').className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+            document.getElementById('status-text').innerText = "已就緒: " + plate;
+            document.getElementById('footer-action-btn').innerText = "已綁定";
+            document.getElementById('footer-action-btn').className = "bg-slate-100 text-slate-400 px-6 py-2.5 rounded-full text-xs font-bold";
+            document.getElementById('footer-action-btn').disabled = true;
+        }
+
+        // 重設綁定 (展示用)
+        function resetBinding() {
+            document.getElementById('plate-input').value = "";
+            document.getElementById('binding-form-box').classList.remove('hidden-section');
+            document.getElementById('binding-success-box').classList.add('hidden-section');
+            
+            document.getElementById('status-dot').className = "w-2 h-2 rounded-full bg-slate-200";
+            document.getElementById('status-text').innerText = "尚未綁定車牌";
+            document.getElementById('footer-action-btn').innerText = "立即開始";
+            document.getElementById('footer-action-btn').className = "hami-orange text-white shadow-lg px-6 py-2.5 rounded-full text-xs font-bold";
+            document.getElementById('footer-action-btn').disabled = false;
+        }
+    </script>
+</body>
+</html>
