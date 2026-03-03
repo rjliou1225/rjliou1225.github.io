@@ -129,7 +129,7 @@
         .tier-card {
             background: #fff;
             border-radius: 16px;
-            padding: 35px 20px;
+            padding: 30px 20px;
             text-align: center;
             border: 2px solid transparent;
             transition: all 0.3s;
@@ -138,7 +138,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            align-items: center; /* 確保按鈕置中 */
         }
 
         .tier-card:hover {
@@ -147,42 +147,45 @@
         }
 
         .tier-label {
-            font-size: 1rem;
+            font-size: 0.95rem;
             color: #666;
             margin-bottom: 5px;
             letter-spacing: 1px;
         }
 
         .tier-points {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 800;
             color: var(--hami-red);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .tier-points span {
-            font-size: 1rem;
+            font-size: 0.9rem;
             margin-left: 4px;
         }
 
         .tier-desc {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #444;
-            min-height: 50px;
             margin-bottom: 20px;
-            padding: 0 10px;
+            line-height: 1.4;
+            height: 40px; /* 固定高度以保持對齊 */
         }
 
+        /* 縮小後的按鈕樣式 */
         .btn-exchange {
             background: var(--text-dark);
             color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
+            padding: 6px 20px; /* 縮減填充 */
+            border-radius: 18px; /* 圓角調整 */
             text-decoration: none;
+            font-size: 0.85rem; /* 縮小字體 */
             font-weight: bold;
             transition: 0.3s;
             border: none;
             cursor: pointer;
+            display: inline-block;
         }
 
         .tier-card:hover .btn-exchange {
@@ -260,7 +263,7 @@
         <div class="tier-card">
             <div class="tier-label">小額零點</div>
             <div class="tier-points">1 ~ 100<span>點</span></div>
-            <div class="tier-desc">適合兌換：超商咖啡、茶葉蛋、單客票券補充</div>
+            <div class="tier-desc">超商咖啡、茶葉蛋、單客票券補充</div>
             <a href="#" class="btn-exchange">進入專區</a>
         </div>
 
@@ -269,7 +272,7 @@
             <div class="hot-tag">去化高峰</div>
             <div class="tier-label">日常確幸</div>
             <div class="tier-points">101 ~ 500<span>點</span></div>
-            <div class="tier-desc">適合兌換：外送抵用券、影音平台月費、餐飲折扣</div>
+            <div class="tier-desc">外送抵用券、影音月費、餐飲折扣</div>
             <a href="#" class="btn-exchange">進入專區</a>
         </div>
 
@@ -277,7 +280,7 @@
         <div class="tier-card">
             <div class="tier-label">質感生活</div>
             <div class="tier-points">501 ~ 1,500<span>點</span></div>
-            <div class="tier-desc">適合兌換：百貨禮券、電信費抵用、居家日用品</div>
+            <div class="tier-desc">百貨禮券、電信費抵用、居家日用品</div>
             <a href="#" class="btn-exchange">進入專區</a>
         </div>
 
@@ -285,7 +288,7 @@
         <div class="tier-card">
             <div class="tier-label">尊榮回饋</div>
             <div class="tier-points">1,501 ~ 5,000<span>點</span></div>
-            <div class="tier-desc">適合兌換：精品家電、頂級住宿券、聯名限定禮</div>
+            <div class="tier-desc">精品家電、頂級住宿券、聯名限定禮</div>
             <a href="#" class="btn-exchange">進入專區</a>
         </div>
 
@@ -293,7 +296,7 @@
         <div class="tier-card">
             <div class="tier-label">豪華點金</div>
             <div class="tier-points">5,000+<span>點</span></div>
-            <div class="tier-desc">適合兌換：日本旅遊折抵、旗艦手機、高價 3C</div>
+            <div class="tier-desc">日本遊折抵、旗艦手機、高價 3C</div>
             <a href="#" class="btn-exchange">進入專區</a>
         </div>
 
@@ -301,7 +304,7 @@
         <div class="tier-card" style="background: #f0f4f8;">
             <div class="tier-label">點數流通</div>
             <div class="tier-points">點數交換<span>∞</span></div>
-            <div class="tier-desc">跨界轉換：悠遊卡、P幣、OPENPOINT 雙向互換</div>
+            <div class="tier-desc">悠遊卡、P幣、OPENPOINT 互換</div>
             <a href="#" class="btn-exchange" style="background: var(--hami-blue);">立即交換</a>
         </div>
     </div>
