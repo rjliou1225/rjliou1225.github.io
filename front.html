@@ -1,204 +1,237 @@
-import React, { useState } from 'react';
-import { ChevronRight, Star, Gift, Zap, Coffee, ShoppingBag, Plane, Monitor, Ticket, Flame } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hami Point 超級商城</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans pb-12">
 
-const App = () => {
-  // 狀態管理：目前選取的點數級距
-  const [activeTier, setActiveTier] = useState('tier1');
-
-  // 模擬數據：熱門品牌
-  const brands = [
-    { id: 1, name: 'Apple (神腦)', tag: '點加金無上限', highlight: 'HOT', icon: <Monitor size={32} className="text-gray-700" />, color: 'bg-gray-100' },
-    { id: 2, name: '日本 TimeLabo', tag: '1點抵1.5元', highlight: '跨境獨家', icon: <Plane size={32} className="text-blue-500" />, color: 'bg-blue-50' },
-    { id: 3, name: '全家便利商店', tag: '咖啡寄杯神優惠', highlight: '', icon: <Coffee size={32} className="text-green-600" />, color: 'bg-green-50' },
-    { id: 4, name: 'PChome 24h', tag: '最高回饋 8%', highlight: '', icon: <ShoppingBag size={32} className="text-orange-500" />, color: 'bg-orange-50' },
-    { id: 5, name: '王品集團', tag: '點數換餐券', highlight: '', icon: <Ticket size={32} className="text-red-500" />, color: 'bg-red-50' },
-    { id: 6, name: 'Dyson', tag: '福利品點數加倍', highlight: '', icon: <Zap size={32} className="text-purple-500" />, color: 'bg-purple-50' },
-  ];
-
-  // 模擬數據：點數級距分類
-  const pointTiers = [
-    { id: 'tier1', label: '1~99 點', desc: '微量點數不浪費' },
-    { id: 'tier2', label: '100~499 點', desc: '日常小確幸' },
-    { id: 'tier3', label: '500~999 點', desc: '生活質感升級' },
-    { id: 'tier4', label: '1000 點以上', desc: '點數富翁專屬' },
-  ];
-
-  // 模擬數據：各級距的商品 (結合點加金策略)
-  const productsData = {
-    tier1: [
-      { id: 101, title: '全家 大杯拿鐵', originalPrice: 55, pointPrice: 10, cashPrice: 45, type: '自由滑桿', img: '☕' },
-      { id: 102, title: '五月花 抽取式衛生紙', originalPrice: 120, pointPrice: 50, cashPrice: 60, type: '點數放大', img: '🧻' },
-      { id: 103, title: 'Hami Video 單片券', originalPrice: 80, pointPrice: 80, cashPrice: 0, type: '全額兌換', img: '🎬' },
-      { id: 104, title: '路邊停車費折抵', originalPrice: 30, pointPrice: 30, cashPrice: 0, type: '全額兌換', img: '🅿️' },
-    ],
-    tier2: [
-      { id: 201, title: '麥當勞 雙層牛肉吉事堡套餐', originalPrice: 150, pointPrice: 100, cashPrice: 50, type: '自由滑桿', img: '🍔' },
-      { id: 202, title: '威秀影城 單人電影票', originalPrice: 320, pointPrice: 200, cashPrice: 100, type: '點加金', img: '🎟️' },
-      { id: 203, title: 'LINE GO 乘車券 $200', originalPrice: 200, pointPrice: 150, cashPrice: 40, type: '點數放大', img: '🚕' },
-      { id: 204, title: 'Netflix 基本方案 (首月)', originalPrice: 270, pointPrice: 270, cashPrice: 0, type: '訂閱扣點', img: '📺' },
-    ],
-    tier3: [
-      { id: 301, title: '家樂福 $1000 即享券', originalPrice: 1000, pointPrice: 500, cashPrice: 500, type: '自由滑桿', img: '🛒' },
-      { id: 302, title: '王品集團 $1000 餐券', originalPrice: 1000, pointPrice: 800, cashPrice: 180, type: '點加金', img: '🥩' },
-      { id: 303, title: '小米 手環 8', originalPrice: 1095, pointPrice: 900, cashPrice: 100, type: '自由滑桿', img: '⌚' },
-      { id: 304, title: '【日本直送】便攜乾衣球', originalPrice: 2300, pointPrice: 500, cashPrice: 1500, type: '點數放大1.5倍', img: '👕' },
-    ],
-    tier4: [
-      { id: 401, title: 'Apple iPhone 16 Pro 256G', originalPrice: 40400, pointPrice: 5000, cashPrice: 35400, type: '自由滑桿(無上限)', img: '📱' },
-      { id: 402, title: '【TimeLabo】青森睡魔祭 VIP雙人席', originalPrice: 58000, pointPrice: 10000, cashPrice: 45000, type: '夢幻逸品', img: '👹' },
-      { id: 403, title: 'Dyson Supersonic 吹風機', originalPrice: 14600, pointPrice: 2000, cashPrice: 12000, type: '自由滑桿', img: '🌪️' },
-      { id: 404, title: 'Nintendo Switch OLED', originalPrice: 10480, pointPrice: 3000, cashPrice: 7000, type: '點加金', img: '🎮' },
-    ],
-  };
-
-  return (
-    <div className="min-h-screen bg-gray-50 font-sans pb-12">
-      {/* 頂部導航模擬 */}
-      <div className="bg-white shadow-sm px-4 py-3 flex justify-between items-center sticky top-0 z-10">
-        <div className="flex items-center gap-2">
-          <div className="bg-orange-500 text-white p-1.5 rounded-lg font-bold">Hami</div>
-          <span className="font-bold text-gray-800 text-lg">Point 超級商城</span>
+    <!-- 頂部導航 -->
+    <div class="bg-white shadow-sm px-4 py-3 flex justify-between items-center sticky top-0 z-10">
+        <div class="flex items-center gap-2">
+            <div class="bg-orange-500 text-white p-1.5 rounded-lg font-bold">Hami</div>
+            <span class="font-bold text-gray-800 text-lg">Point 超級商城</span>
         </div>
-        <div className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-          <Star size={14} /> 1,250 點
+        <div class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
+            <i class="fas fa-star text-xs"></i> 1,250 點
         </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-4 pt-6 space-y-10">
-        
-        {/* === 區塊一：熱門品牌館 === */}
-        <section>
-          <div className="flex justify-between items-end mb-4">
-            <div>
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <Flame className="text-red-500" /> 熱門品牌館
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">集結頂尖品牌，點數折抵最划算</p>
-            </div>
-            <button className="text-orange-500 text-sm font-medium flex items-center">
-              全部品牌 <ChevronRight size={16} />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {brands.map((brand) => (
-              <div key={brand.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden flex flex-col items-center text-center group">
-                {brand.highlight && (
-                  <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg">
-                    {brand.highlight}
-                  </span>
-                )}
-                <div className={`w-16 h-16 rounded-full ${brand.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-                  {brand.icon}
-                </div>
-                <h3 className="font-bold text-gray-800 text-sm mb-1">{brand.name}</h3>
-                <span className="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
-                  {brand.tag}
-                </span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* === 區塊二：點數級距精準換 === */}
-        <section>
-          <div className="flex justify-between items-end mb-4">
-            <div>
-              <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                <Gift className="text-orange-500" /> 點數精準換
-              </h2>
-              <p className="text-sm text-gray-500 mt-1">根據您的點數餘額，探索最佳兌換方案</p>
-            </div>
-          </div>
-
-          {/* 級距選擇器 */}
-          <div className="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 gap-2 mb-4 hide-scrollbar">
-            {pointTiers.map((tier) => (
-              <button
-                key={tier.id}
-                onClick={() => setActiveTier(tier.id)}
-                className={`flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors border ${
-                  activeTier === tier.id
-                    ? 'bg-orange-500 text-white border-orange-500 shadow-md'
-                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                }`}
-              >
-                <div className="block">{tier.label}</div>
-                <div className={`text-[10px] font-normal mt-0.5 ${activeTier === tier.id ? 'text-orange-100' : 'text-gray-400'}`}>
-                  {tier.desc}
-                </div>
-              </button>
-            ))}
-          </div>
-
-          {/* 商品列表 Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {productsData[activeTier].map((product) => (
-              <div key={product.id} className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 hover:shadow-lg transition-all cursor-pointer flex flex-col h-full relative">
-                
-                {/* 策略標籤 (Badge) */}
-                <div className="absolute top-2 left-2 z-10">
-                  <span className={`text-[10px] font-bold px-2 py-1 rounded-md text-white shadow-sm ${
-                    product.type.includes('放大') ? 'bg-gradient-to-r from-purple-500 to-indigo-500' :
-                    product.type.includes('滑桿') ? 'bg-gradient-to-r from-orange-400 to-red-500' :
-                    'bg-gray-800'
-                  }`}>
-                    {product.type}
-                  </span>
-                </div>
-
-                {/* 模擬商品圖 */}
-                <div className="bg-gray-50 rounded-xl aspect-square flex items-center justify-center text-6xl mb-3 relative">
-                  {product.img}
-                </div>
-
-                {/* 商品資訊 */}
-                <div className="flex flex-col flex-grow justify-between">
-                  <div>
-                    <h3 className="font-medium text-gray-800 text-sm leading-snug line-clamp-2 mb-1">{product.title}</h3>
-                    <p className="text-xs text-gray-400 line-through">市價 ${product.originalPrice.toLocaleString()}</p>
-                  </div>
-                  
-                  {/* 點加金價格展示 */}
-                  <div className="mt-3 bg-orange-50 rounded-lg p-2 border border-orange-100">
-                    <div className="flex items-center gap-1">
-                      <Star size={14} className="text-orange-500 fill-orange-500" />
-                      <span className="font-bold text-orange-600">{product.pointPrice.toLocaleString()}</span>
-                      <span className="text-xs text-orange-600">點</span>
-                    </div>
-                    {product.cashPrice > 0 ? (
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <span className="text-xs text-gray-500">+ 現金 $</span>
-                        <span className="font-bold text-gray-800">{product.cashPrice.toLocaleString()}</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <span className="text-xs font-bold text-green-600 bg-green-100 px-1 rounded">免費兌換</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* 策略提示區塊 (僅示範用) */}
-          <div className="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start">
-            <div className="bg-blue-100 p-2 rounded-full text-blue-600 mt-1">
-              💡
-            </div>
-            <div>
-              <h4 className="text-sm font-bold text-blue-800 mb-1">小哈的策略解析</h4>
-              <p className="text-xs text-blue-600 leading-relaxed">
-                此區塊將「點數不足」的痛點轉化為「點加金」的商機。高點數用戶可看見 Apple、日本遊等高單價錨點商品；微量點數用戶則被引導至超商咖啡等高頻次場景，確保 30 億點順利去化並帶動現金流。
-              </p>
-            </div>
-          </div>
-        </section>
-
-      </div>
     </div>
-  );
-};
 
-export default App;
+    <div class="max-w-4xl mx-auto px-4 pt-6 space-y-10">
+        
+        <!-- === 區塊一：熱門品牌館 === -->
+        <section>
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-fire text-red-500"></i> 熱門品牌館
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1">集結頂尖品牌，點數折抵最划算</p>
+                </div>
+                <button class="text-orange-500 text-sm font-medium flex items-center hover:text-orange-600 transition-colors">
+                    全部品牌 <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="brands-container">
+                <!-- Brands will be inserted here by JS -->
+            </div>
+        </section>
+
+        <!-- === 區塊二：點數級距精準換 === -->
+        <section>
+            <div class="flex justify-between items-end mb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                        <i class="fas fa-gift text-orange-500"></i> 點數精準換
+                    </h2>
+                    <p class="text-sm text-gray-500 mt-1">根據您的點數餘額，探索最佳兌換方案</p>
+                </div>
+            </div>
+
+            <!-- 級距選擇器 -->
+            <div class="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 gap-2 mb-4 hide-scrollbar" id="tiers-container">
+                <!-- Tiers will be inserted here by JS -->
+            </div>
+
+            <!-- 商品列表 Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="products-container">
+                <!-- Products will be inserted here by JS -->
+            </div>
+
+            <!-- 策略提示區塊 -->
+            <div class="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start shadow-sm">
+                <div class="bg-blue-100 p-2 rounded-full text-blue-600 mt-1 flex-shrink-0">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-blue-800 mb-1">小哈的策略解析</h4>
+                    <p class="text-xs text-blue-600 leading-relaxed">
+                        此區塊將「點數不足」的痛點轉化為「點加金」的商機。高點數用戶可看見 Apple、日本遊等高單價錨點商品；微量點數用戶則被引導至超商咖啡等高頻次場景，確保 30 億點順利去化並帶動現金流。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // 模擬數據：熱門品牌
+        const brands = [
+            { id: 1, name: 'Apple (神腦)', tag: '點加金無上限', highlight: 'HOT', iconClass: 'fas fa-desktop text-gray-700', color: 'bg-gray-100' },
+            { id: 2, name: '日本 TimeLabo', tag: '1點抵1.5元', highlight: '跨境獨家', iconClass: 'fas fa-plane text-blue-500', color: 'bg-blue-50' },
+            { id: 3, name: '全家便利商店', tag: '咖啡寄杯神優惠', highlight: '', iconClass: 'fas fa-coffee text-green-600', color: 'bg-green-50' },
+            { id: 4, name: 'PChome 24h', tag: '最高回饋 8%', highlight: '', iconClass: 'fas fa-shopping-bag text-orange-500', color: 'bg-orange-50' },
+            { id: 5, name: '王品集團', tag: '點數換餐券', highlight: '', iconClass: 'fas fa-ticket-alt text-red-500', color: 'bg-red-50' },
+            { id: 6, name: 'Dyson', tag: '福利品點數加倍', highlight: '', iconClass: 'fas fa-bolt text-purple-500', color: 'bg-purple-50' },
+        ];
+
+        // 模擬數據：點數級距分類
+        const pointTiers = [
+            { id: 'tier1', label: '1~99 點', desc: '微量點數不浪費' },
+            { id: 'tier2', label: '100~499 點', desc: '日常小確幸' },
+            { id: 'tier3', label: '500~999 點', desc: '生活質感升級' },
+            { id: 'tier4', label: '1000 點以上', desc: '點數富翁專屬' },
+        ];
+
+        // 模擬數據：各級距的商品
+        const productsData = {
+            tier1: [
+                { id: 101, title: '全家 大杯拿鐵', originalPrice: 55, pointPrice: 10, cashPrice: 45, type: '自由滑桿', img: '☕' },
+                { id: 102, title: '五月花 抽取式衛生紙', originalPrice: 120, pointPrice: 50, cashPrice: 60, type: '點數放大', img: '🧻' },
+                { id: 103, title: 'Hami Video 單片券', originalPrice: 80, pointPrice: 80, cashPrice: 0, type: '全額兌換', img: '🎬' },
+                { id: 104, title: '路邊停車費折抵', originalPrice: 30, pointPrice: 30, cashPrice: 0, type: '全額兌換', img: '🅿️' },
+            ],
+            tier2: [
+                { id: 201, title: '麥當勞 雙層牛肉吉事堡套餐', originalPrice: 150, pointPrice: 100, cashPrice: 50, type: '自由滑桿', img: '🍔' },
+                { id: 202, title: '威秀影城 單人電影票', originalPrice: 320, pointPrice: 200, cashPrice: 100, type: '點加金', img: '🎟️' },
+                { id: 203, title: 'LINE GO 乘車券 $200', originalPrice: 200, pointPrice: 150, cashPrice: 40, type: '點數放大', img: '🚕' },
+                { id: 204, title: 'Netflix 基本方案 (首月)', originalPrice: 270, pointPrice: 270, cashPrice: 0, type: '訂閱扣點', img: '📺' },
+            ],
+            tier3: [
+                { id: 301, title: '家樂福 $1000 即享券', originalPrice: 1000, pointPrice: 500, cashPrice: 500, type: '自由滑桿', img: '🛒' },
+                { id: 302, title: '王品集團 $1000 餐券', originalPrice: 1000, pointPrice: 800, cashPrice: 180, type: '點加金', img: '🥩' },
+                { id: 303, title: '小米 手環 8', originalPrice: 1095, pointPrice: 900, cashPrice: 100, type: '自由滑桿', img: '⌚' },
+                { id: 304, title: '【日本直送】便攜乾衣球', originalPrice: 2300, pointPrice: 500, cashPrice: 1500, type: '點數放大1.5倍', img: '👕' },
+            ],
+            tier4: [
+                { id: 401, title: 'Apple iPhone 16 Pro 256G', originalPrice: 40400, pointPrice: 5000, cashPrice: 35400, type: '自由滑桿(無上限)', img: '📱' },
+                { id: 402, title: '【TimeLabo】青森睡魔祭 VIP雙人席', originalPrice: 58000, pointPrice: 10000, cashPrice: 45000, type: '夢幻逸品', img: '👹' },
+                { id: 403, title: 'Dyson Supersonic 吹風機', originalPrice: 14600, pointPrice: 2000, cashPrice: 12000, type: '自由滑桿', img: '🌪️' },
+                { id: 404, title: 'Nintendo Switch OLED', originalPrice: 10480, pointPrice: 3000, cashPrice: 7000, type: '點加金', img: '🎮' },
+            ],
+        };
+
+        let activeTier = 'tier1';
+
+        // 渲染品牌
+        function renderBrands() {
+            const container = document.getElementById('brands-container');
+            container.innerHTML = brands.map(brand => `
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden flex flex-col items-center text-center group">
+                    ${brand.highlight ? `<span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg">${brand.highlight}</span>` : ''}
+                    <div class="w-16 h-16 rounded-full ${brand.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="${brand.iconClass} text-2xl"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-sm mb-1">${brand.name}</h3>
+                    <span class="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
+                        ${brand.tag}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        // 渲染級距按鈕
+        function renderTiers() {
+            const container = document.getElementById('tiers-container');
+            container.innerHTML = pointTiers.map(tier => {
+                const isActive = activeTier === tier.id;
+                const baseClasses = "flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors border outline-none";
+                const activeClasses = isActive ? 'bg-orange-500 text-white border-orange-500 shadow-md' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50';
+                const descClasses = `text-[10px] font-normal mt-0.5 ${isActive ? 'text-orange-100' : 'text-gray-400'}`;
+                
+                return `
+                    <button onclick="changeTier('${tier.id}')" class="${baseClasses} ${activeClasses}">
+                        <div class="block">${tier.label}</div>
+                        <div class="${descClasses}">${tier.desc}</div>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        // 渲染商品
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            const products = productsData[activeTier];
+            
+            container.innerHTML = products.map(product => {
+                let badgeClass = 'bg-gray-800';
+                if (product.type.includes('放大')) badgeClass = 'bg-gradient-to-r from-purple-500 to-indigo-500';
+                else if (product.type.includes('滑桿')) badgeClass = 'bg-gradient-to-r from-orange-400 to-red-500';
+
+                return `
+                    <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 hover:shadow-lg transition-all cursor-pointer flex flex-col h-full relative">
+                        <div class="absolute top-2 left-2 z-10">
+                            <span class="text-[10px] font-bold px-2 py-1 rounded-md text-white shadow-sm ${badgeClass}">
+                                ${product.type}
+                            </span>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl aspect-square flex items-center justify-center text-6xl mb-3 relative">
+                            ${product.img}
+                        </div>
+                        <div class="flex flex-col flex-grow justify-between">
+                            <div>
+                                <h3 class="font-medium text-gray-800 text-sm leading-snug line-clamp-2 mb-1">${product.title}</h3>
+                                <p class="text-xs text-gray-400 line-through">市價 $${product.originalPrice.toLocaleString()}</p>
+                            </div>
+                            <div class="mt-3 bg-orange-50 rounded-lg p-2 border border-orange-100">
+                                <div class="flex items-center gap-1">
+                                    <i class="fas fa-star text-orange-500 text-[10px]"></i>
+                                    <span class="font-bold text-orange-600">${product.pointPrice.toLocaleString()}</span>
+                                    <span class="text-xs text-orange-600">點</span>
+                                </div>
+                                ${product.cashPrice > 0 ? `
+                                    <div class="flex items-center gap-1 mt-0.5">
+                                        <span class="text-xs text-gray-500">+ 現金 $</span>
+                                        <span class="font-bold text-gray-800">${product.cashPrice.toLocaleString()}</span>
+                                    </div>
+                                ` : `
+                                    <div class="flex items-center gap-1 mt-0.5">
+                                        <span class="text-xs font-bold text-green-600 bg-green-100 px-1 rounded">免費兌換</span>
+                                    </div>
+                                `}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 處理級距切換
+        function changeTier(tierId) {
+            activeTier = tierId;
+            renderTiers();
+            renderProducts();
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBrands();
+            renderTiers();
+            renderProducts();
+        });
+    </script>
+</body>
+</html>
