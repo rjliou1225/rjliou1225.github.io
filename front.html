@@ -3,235 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hami Point 超級商城</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Hami Point 點數經濟管理 - 原型預覽</title>
     <style>
-        .hide-scrollbar::-webkit-scrollbar {
-            display: none;
+        :root {
+            --hami-red: #E60012;
+            --hami-blue: #005CAF;
+            --bg-light: #F8F9FA;
+            --text-dark: #333;
         }
-        .hide-scrollbar {
-            -ms-overflow-style: none;  
-            scrollbar-width: none;  
+
+        body {
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            margin: 0;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--hami-red);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .user-points-banner {
+            background: linear-gradient(135deg, var(--hami-red), #ff4d4d);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            border-left: 5px solid var(--hami-red);
+            padding-left: 15px;
+            margin: 30px 0 20px;
+        }
+
+        /* 熱門品牌捲動區 (雙行) */
+        .brand-section {
+            padding: 10px 0;
+        }
+
+        .brand-scroll-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .brand-row {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding-bottom: 10px;
+            /* 隱藏捲軸但保持功能 */
+            scrollbar-width: thin;
+            scrollbar-color: #ddd transparent;
+        }
+
+        .brand-row::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .brand-row::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 10px;
+        }
+
+        .brand-item {
+            flex: 0 0 140px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px 5px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .brand-item:hover {
+            border-color: var(--hami-red);
+            transform: translateY(-3px);
+            background: #fff9f9;
+        }
+
+        .brand-logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .brand-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* 點數兌換級距區 (無商品圖) */
+        .tier-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .tier-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 35px 20px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .tier-card:hover {
+            border-color: var(--hami-red);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+
+        .tier-label {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .tier-points {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--hami-red);
+            margin-bottom: 15px;
+        }
+
+        .tier-points span {
+            font-size: 1rem;
+            margin-left: 4px;
+        }
+
+        .tier-desc {
+            font-size: 0.95rem;
+            color: #444;
+            min-height: 50px;
+            margin-bottom: 20px;
+            padding: 0 10px;
+        }
+
+        .btn-exchange {
+            background: var(--text-dark);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tier-card:hover .btn-exchange {
+            background: var(--hami-red);
+        }
+
+        /* 標籤設計 */
+        .hot-tag {
+            position: absolute;
+            top: 15px;
+            left: -35px;
+            background: #FFD700;
+            color: #333;
+            padding: 5px 40px;
+            transform: rotate(-45deg);
+            font-size: 0.75rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        footer {
+            background: #333;
+            color: #ccc;
+            padding: 40px 20px;
+            text-align: center;
+            font-size: 0.85rem;
         }
     </style>
 </head>
-<body class="min-h-screen bg-gray-50 font-sans pb-12">
+<body>
 
-    <!-- 頂部導航 -->
-    <div class="bg-white shadow-sm px-4 py-3 flex justify-between items-center sticky top-0 z-10">
-        <div class="flex items-center gap-2">
-            <div class="bg-orange-500 text-white p-1.5 rounded-lg font-bold">Hami</div>
-            <span class="font-bold text-gray-800 text-lg">Point 超級商城</span>
-        </div>
-        <div class="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-            <i class="fas fa-star text-xs"></i> 1,250 點
+<header>
+    <h1 style="color: var(--hami-red); margin:0; font-size: 1.6rem;">Hami Point 生態圈管理平臺</h1>
+</header>
+
+<div class="user-points-banner">
+    總舵手，目前生態圈活躍點數：<strong>3,520,000,000</strong> 點 | <small>📅 年度結算倒數：30 天</small>
+</div>
+
+<div class="container">
+    
+    <h2>熱門品牌雙行捲動 (橫向探索)</h2>
+    <div class="brand-section">
+        <div class="brand-scroll-container">
+            <!-- 第一行品牌：高頻生活類 -->
+            <div class="brand-row">
+                <div class="brand-item"><div class="brand-logo-placeholder">7-11</div><div class="brand-name">7-ELEVEN</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">全家</div><div class="brand-name">全家便利商店</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">家樂福</div><div class="brand-name">家樂福</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">PChome</div><div class="brand-name">PChome 24h</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">星巴克</div><div class="brand-name">星巴克</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">KFC</div><div class="brand-name">肯德基</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">中油</div><div class="brand-name">中油直營</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">Momo</div><div class="brand-name">momo購物網</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">全聯</div><div class="brand-name">全聯福利中心</div></div>
+            </div>
+            <!-- 第二行品牌：通路與電商 -->
+            <div class="brand-row">
+                <div class="brand-item"><div class="brand-logo-placeholder">Uber</div><div class="brand-name">Uber Eats</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">神腦</div><div class="brand-name">神腦生活</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">foodpanda</div><div class="brand-name">foodpanda</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">酷澎</div><div class="brand-name">Coupang 酷澎</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">屈臣氏</div><div class="brand-name">屈臣氏</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">樂天</div><div class="brand-name">台灣樂天市場</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">誠品</div><div class="brand-name">誠品線上</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">日本</div><div class="brand-name">Hami 日本遊</div></div>
+                <div class="brand-item"><div class="brand-logo-placeholder">博客來</div><div class="brand-name">博客來</div></div>
+            </div>
         </div>
     </div>
 
-    <div class="max-w-4xl mx-auto px-4 pt-6 space-y-10">
-        
-        <!-- === 區塊一：熱門品牌館 === -->
-        <section>
-            <div class="flex justify-between items-end mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        <i class="fas fa-fire text-red-500"></i> 熱門品牌館
-                    </h2>
-                    <p class="text-sm text-gray-500 mt-1">集結頂尖品牌，點數折抵最划算</p>
-                </div>
-                <button class="text-orange-500 text-sm font-medium flex items-center hover:text-orange-600 transition-colors">
-                    全部品牌 <i class="fas fa-chevron-right ml-1 text-xs"></i>
-                </button>
-            </div>
+    <h2>點數去化：級距式兌換專區</h2>
+    <div class="tier-section">
+        <!-- 級距 1 -->
+        <div class="tier-card">
+            <div class="tier-label">小額零點</div>
+            <div class="tier-points">1 ~ 100<span>點</span></div>
+            <div class="tier-desc">適合兌換：超商咖啡、茶葉蛋、單客票券補充</div>
+            <a href="#" class="btn-exchange">進入專區</a>
+        </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3" id="brands-container">
-                <!-- Brands will be inserted here by JS -->
-            </div>
-        </section>
+        <!-- 級距 2 -->
+        <div class="tier-card">
+            <div class="hot-tag">去化高峰</div>
+            <div class="tier-label">日常確幸</div>
+            <div class="tier-points">101 ~ 500<span>點</span></div>
+            <div class="tier-desc">適合兌換：外送抵用券、影音平台月費、餐飲折扣</div>
+            <a href="#" class="btn-exchange">進入專區</a>
+        </div>
 
-        <!-- === 區塊二：點數級距精準換 === -->
-        <section>
-            <div class="flex justify-between items-end mb-4">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        <i class="fas fa-gift text-orange-500"></i> 點數精準換
-                    </h2>
-                    <p class="text-sm text-gray-500 mt-1">根據您的點數餘額，探索最佳兌換方案</p>
-                </div>
-            </div>
+        <!-- 級距 3 -->
+        <div class="tier-card">
+            <div class="tier-label">質感生活</div>
+            <div class="tier-points">501 ~ 1,500<span>點</span></div>
+            <div class="tier-desc">適合兌換：百貨禮券、電信費抵用、居家日用品</div>
+            <a href="#" class="btn-exchange">進入專區</a>
+        </div>
 
-            <!-- 級距選擇器 -->
-            <div class="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 gap-2 mb-4 hide-scrollbar" id="tiers-container">
-                <!-- Tiers will be inserted here by JS -->
-            </div>
+        <!-- 級距 4 -->
+        <div class="tier-card">
+            <div class="tier-label">尊榮回饋</div>
+            <div class="tier-points">1,501 ~ 5,000<span>點</span></div>
+            <div class="tier-desc">適合兌換：精品家電、頂級住宿券、聯名限定禮</div>
+            <a href="#" class="btn-exchange">進入專區</a>
+        </div>
 
-            <!-- 商品列表 Grid -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="products-container">
-                <!-- Products will be inserted here by JS -->
-            </div>
+        <!-- 級距 5 -->
+        <div class="tier-card">
+            <div class="tier-label">豪華點金</div>
+            <div class="tier-points">5,000+<span>點</span></div>
+            <div class="tier-desc">適合兌換：日本旅遊折抵、旗艦手機、高價 3C</div>
+            <a href="#" class="btn-exchange">進入專區</a>
+        </div>
 
-            <!-- 策略提示區塊 -->
-            <div class="mt-6 bg-blue-50 border border-blue-100 rounded-xl p-4 flex gap-3 items-start shadow-sm">
-                <div class="bg-blue-100 p-2 rounded-full text-blue-600 mt-1 flex-shrink-0">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <div>
-                    <h4 class="text-sm font-bold text-blue-800 mb-1">小哈的策略解析</h4>
-                    <p class="text-xs text-blue-600 leading-relaxed">
-                        此區塊將「點數不足」的痛點轉化為「點加金」的商機。高點數用戶可看見 Apple、日本遊等高單價錨點商品；微量點數用戶則被引導至超商咖啡等高頻次場景，確保 30 億點順利去化並帶動現金流。
-                    </p>
-                </div>
-            </div>
-        </section>
-
+        <!-- 級距 6 -->
+        <div class="tier-card" style="background: #f0f4f8;">
+            <div class="tier-label">點數流通</div>
+            <div class="tier-points">點數交換<span>∞</span></div>
+            <div class="tier-desc">跨界轉換：悠遊卡、P幣、OPENPOINT 雙向互換</div>
+            <a href="#" class="btn-exchange" style="background: var(--hami-blue);">立即交換</a>
+        </div>
     </div>
 
-    <script>
-        // 模擬數據：熱門品牌
-        const brands = [
-            { id: 1, name: 'Apple (神腦)', tag: '點加金無上限', highlight: 'HOT', iconClass: 'fas fa-desktop text-gray-700', color: 'bg-gray-100' },
-            { id: 2, name: '日本 TimeLabo', tag: '1點抵1.5元', highlight: '跨境獨家', iconClass: 'fas fa-plane text-blue-500', color: 'bg-blue-50' },
-            { id: 3, name: '全家便利商店', tag: '咖啡寄杯神優惠', highlight: '', iconClass: 'fas fa-coffee text-green-600', color: 'bg-green-50' },
-            { id: 4, name: 'PChome 24h', tag: '最高回饋 8%', highlight: '', iconClass: 'fas fa-shopping-bag text-orange-500', color: 'bg-orange-50' },
-            { id: 5, name: '王品集團', tag: '點數換餐券', highlight: '', iconClass: 'fas fa-ticket-alt text-red-500', color: 'bg-red-50' },
-            { id: 6, name: 'Dyson', tag: '福利品點數加倍', highlight: '', iconClass: 'fas fa-bolt text-purple-500', color: 'bg-purple-50' },
-        ];
+</div>
 
-        // 模擬數據：點數級距分類
-        const pointTiers = [
-            { id: 'tier1', label: '1~99 點', desc: '微量點數不浪費' },
-            { id: 'tier2', label: '100~499 點', desc: '日常小確幸' },
-            { id: 'tier3', label: '500~999 點', desc: '生活質感升級' },
-            { id: 'tier4', label: '1000 點以上', desc: '點數富翁專屬' },
-        ];
+<footer>
+    中華電信 Hami Point 經營檢討室<br>
+    <small>點數經濟專家「小哈同學」協助規劃 | 數據參考 114年經營績效資料</small>
+</footer>
 
-        // 模擬數據：各級距的商品
-        const productsData = {
-            tier1: [
-                { id: 101, title: '全家 大杯拿鐵', originalPrice: 55, pointPrice: 10, cashPrice: 45, type: '自由滑桿', img: '☕' },
-                { id: 102, title: '五月花 抽取式衛生紙', originalPrice: 120, pointPrice: 50, cashPrice: 60, type: '點數放大', img: '🧻' },
-                { id: 103, title: 'Hami Video 單片券', originalPrice: 80, pointPrice: 80, cashPrice: 0, type: '全額兌換', img: '🎬' },
-                { id: 104, title: '路邊停車費折抵', originalPrice: 30, pointPrice: 30, cashPrice: 0, type: '全額兌換', img: '🅿️' },
-            ],
-            tier2: [
-                { id: 201, title: '麥當勞 雙層牛肉吉事堡套餐', originalPrice: 150, pointPrice: 100, cashPrice: 50, type: '自由滑桿', img: '🍔' },
-                { id: 202, title: '威秀影城 單人電影票', originalPrice: 320, pointPrice: 200, cashPrice: 100, type: '點加金', img: '🎟️' },
-                { id: 203, title: 'LINE GO 乘車券 $200', originalPrice: 200, pointPrice: 150, cashPrice: 40, type: '點數放大', img: '🚕' },
-                { id: 204, title: 'Netflix 基本方案 (首月)', originalPrice: 270, pointPrice: 270, cashPrice: 0, type: '訂閱扣點', img: '📺' },
-            ],
-            tier3: [
-                { id: 301, title: '家樂福 $1000 即享券', originalPrice: 1000, pointPrice: 500, cashPrice: 500, type: '自由滑桿', img: '🛒' },
-                { id: 302, title: '王品集團 $1000 餐券', originalPrice: 1000, pointPrice: 800, cashPrice: 180, type: '點加金', img: '🥩' },
-                { id: 303, title: '小米 手環 8', originalPrice: 1095, pointPrice: 900, cashPrice: 100, type: '自由滑桿', img: '⌚' },
-                { id: 304, title: '【日本直送】便攜乾衣球', originalPrice: 2300, pointPrice: 500, cashPrice: 1500, type: '點數放大1.5倍', img: '👕' },
-            ],
-            tier4: [
-                { id: 401, title: 'Apple iPhone 16 Pro 256G', originalPrice: 40400, pointPrice: 5000, cashPrice: 35400, type: '自由滑桿(無上限)', img: '📱' },
-                { id: 402, title: '【TimeLabo】青森睡魔祭 VIP雙人席', originalPrice: 58000, pointPrice: 10000, cashPrice: 45000, type: '夢幻逸品', img: '👹' },
-                { id: 403, title: 'Dyson Supersonic 吹風機', originalPrice: 14600, pointPrice: 2000, cashPrice: 12000, type: '自由滑桿', img: '🌪️' },
-                { id: 404, title: 'Nintendo Switch OLED', originalPrice: 10480, pointPrice: 3000, cashPrice: 7000, type: '點加金', img: '🎮' },
-            ],
-        };
-
-        let activeTier = 'tier1';
-
-        // 渲染品牌
-        function renderBrands() {
-            const container = document.getElementById('brands-container');
-            container.innerHTML = brands.map(brand => `
-                <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow cursor-pointer relative overflow-hidden flex flex-col items-center text-center group">
-                    ${brand.highlight ? `<span class="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg">${brand.highlight}</span>` : ''}
-                    <div class="w-16 h-16 rounded-full ${brand.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
-                        <i class="${brand.iconClass} text-2xl"></i>
-                    </div>
-                    <h3 class="font-bold text-gray-800 text-sm mb-1">${brand.name}</h3>
-                    <span class="text-xs text-orange-600 bg-orange-50 px-2 py-0.5 rounded-full border border-orange-100">
-                        ${brand.tag}
-                    </span>
-                </div>
-            `).join('');
-        }
-
-        // 渲染級距按鈕
-        function renderTiers() {
-            const container = document.getElementById('tiers-container');
-            container.innerHTML = pointTiers.map(tier => {
-                const isActive = activeTier === tier.id;
-                const baseClasses = "flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors border outline-none";
-                const activeClasses = isActive ? 'bg-orange-500 text-white border-orange-500 shadow-md' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50';
-                const descClasses = `text-[10px] font-normal mt-0.5 ${isActive ? 'text-orange-100' : 'text-gray-400'}`;
-                
-                return `
-                    <button onclick="changeTier('${tier.id}')" class="${baseClasses} ${activeClasses}">
-                        <div class="block">${tier.label}</div>
-                        <div class="${descClasses}">${tier.desc}</div>
-                    </button>
-                `;
-            }).join('');
-        }
-
-        // 渲染商品
-        function renderProducts() {
-            const container = document.getElementById('products-container');
-            const products = productsData[activeTier];
-            
-            container.innerHTML = products.map(product => {
-                let badgeClass = 'bg-gray-800';
-                if (product.type.includes('放大')) badgeClass = 'bg-gradient-to-r from-purple-500 to-indigo-500';
-                else if (product.type.includes('滑桿')) badgeClass = 'bg-gradient-to-r from-orange-400 to-red-500';
-
-                return `
-                    <div class="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 hover:shadow-lg transition-all cursor-pointer flex flex-col h-full relative">
-                        <div class="absolute top-2 left-2 z-10">
-                            <span class="text-[10px] font-bold px-2 py-1 rounded-md text-white shadow-sm ${badgeClass}">
-                                ${product.type}
-                            </span>
-                        </div>
-                        <div class="bg-gray-50 rounded-xl aspect-square flex items-center justify-center text-6xl mb-3 relative">
-                            ${product.img}
-                        </div>
-                        <div class="flex flex-col flex-grow justify-between">
-                            <div>
-                                <h3 class="font-medium text-gray-800 text-sm leading-snug line-clamp-2 mb-1">${product.title}</h3>
-                                <p class="text-xs text-gray-400 line-through">市價 $${product.originalPrice.toLocaleString()}</p>
-                            </div>
-                            <div class="mt-3 bg-orange-50 rounded-lg p-2 border border-orange-100">
-                                <div class="flex items-center gap-1">
-                                    <i class="fas fa-star text-orange-500 text-[10px]"></i>
-                                    <span class="font-bold text-orange-600">${product.pointPrice.toLocaleString()}</span>
-                                    <span class="text-xs text-orange-600">點</span>
-                                </div>
-                                ${product.cashPrice > 0 ? `
-                                    <div class="flex items-center gap-1 mt-0.5">
-                                        <span class="text-xs text-gray-500">+ 現金 $</span>
-                                        <span class="font-bold text-gray-800">${product.cashPrice.toLocaleString()}</span>
-                                    </div>
-                                ` : `
-                                    <div class="flex items-center gap-1 mt-0.5">
-                                        <span class="text-xs font-bold text-green-600 bg-green-100 px-1 rounded">免費兌換</span>
-                                    </div>
-                                `}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // 處理級距切換
-        function changeTier(tierId) {
-            activeTier = tierId;
-            renderTiers();
-            renderProducts();
-        }
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            renderBrands();
-            renderTiers();
-            renderProducts();
-        });
-    </script>
 </body>
 </html>
