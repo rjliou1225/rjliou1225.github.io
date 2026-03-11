@@ -3,270 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hami Point 點數經濟管理系統</title>
+    <title>點數抵扣管理 | Hami Point</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
         body { font-family: 'Noto Sans TC', sans-serif; }
-        .bg-cht-blue { background-color: #0056b3; }
-        .text-cht-blue { color: #0056b3; }
-        .bg-hami-green { background-color: #82c91e; }
-        .text-hami-green { color: #82c91e; }
-        .brand-card:hover { transform: scale(1.05); transition: all 0.2s; }
+        .tab-active { @apply border-b-4 border-hami-green text-hami-green; }
+        .glass-effect { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .gradient-bg { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="gradient-bg text-gray-800 min-h-screen">
 
-    <div class="flex min-h-screen">
-        <!-- 1. 左側選單 (已移除 Hami Pay，改推薦點數放大) -->
-        <aside class="w-72 bg-cht-blue text-white flex-shrink-0 shadow-xl">
-            <div class="p-8 border-b border-blue-400">
-                <div class="flex items-center space-x-3">
-                    <div class="bg-white p-2 rounded-lg">
-                        <i class="fas fa-coins text-hami-green text-2xl"></i>
+    <!-- 導航列 -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+            <button class="text-gray-500 hover:text-gray-800 transition">
+                <i class="fas fa-chevron-left text-xl"></i>
+            </button>
+            <h1 class="text-lg font-bold">點數抵帳單 / 機款</h1>
+            <div class="w-8"></div> <!-- Spacer -->
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto p-4 space-y-6 pb-20">
+        
+        <!-- 頂部 Tab 切換 -->
+        <div class="flex bg-white rounded-2xl shadow-sm p-1 overflow-hidden">
+            <button onclick="switchTab('device')" id="tab-device" class="flex-1 py-3 text-center font-bold rounded-xl transition duration-300 bg-hami-green text-white">
+                點數抵機款
+            </button>
+            <button onclick="switchTab('bill')" id="tab-bill" class="flex-1 py-3 text-center font-bold rounded-xl transition duration-300 text-gray-400 hover:bg-gray-50">
+                點數抵帳單
+            </button>
+        </div>
+
+        <!-- 點數資訊與計算卡片 -->
+        <section class="bg-white rounded-3xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-8 text-white relative">
+                <div class="relative z-10">
+                    <p class="text-blue-200 text-sm mb-1 uppercase tracking-wider">Current Balance</p>
+                    <div class="flex items-baseline space-x-2">
+                        <span class="text-5xl font-black">2,480</span>
+                        <span class="text-lg font-medium opacity-80">P</span>
                     </div>
-                    <span class="text-xl font-bold tracking-tight">Hami Point 總舵</span>
+                    <p class="mt-4 text-xs bg-blue-500/30 inline-block px-3 py-1 rounded-full border border-blue-400/30">
+                        <i class="fas fa-info-circle mr-1"></i> 1 點 = 1 元
+                    </p>
                 </div>
+                <!-- 裝飾背景圖案 -->
+                <i class="fas fa-coins absolute -bottom-4 -right-4 text-9xl text-white opacity-10"></i>
             </div>
-            
-            <nav class="mt-6">
-                <div class="px-6 py-2 text-xs font-semibold text-blue-200 uppercase tracking-widest opacity-70">數據總覽</div>
-                <a href="#" class="flex items-center px-6 py-4 bg-blue-800 border-l-4 border-hami-green transition">
-                    <i class="fas fa-tachometer-alt w-8"></i>
-                    <span>經營績效儀表板</span>
-                </a>
 
-                <div class="px-6 py-2 mt-6 text-xs font-semibold text-blue-200 uppercase tracking-widest opacity-70">核心增長策略</div>
-                <!-- 優化項：左側改推薦點數放大 -->
-                <a href="#" class="flex items-center px-6 py-4 hover:bg-blue-700 transition group">
-                    <i class="fas fa-chart-line w-8 text-hami-green"></i>
-                    <span class="font-medium text-white group-hover:text-hami-green">點數放大專區</span>
-                    <span class="ml-auto bg-red-500 text-[10px] px-2 py-0.5 rounded-full">HOT</span>
-                </a>
-                <a href="#" class="flex items-center px-6 py-4 hover:bg-blue-700 transition">
-                    <i class="fas fa-credit-card w-8"></i>
-                    <span>聯名卡扣繳管理</span>
-                </a>
-                <a href="#" class="flex items-center px-6 py-4 hover:bg-blue-700 transition">
-                    <i class="fas fa-shopping-cart w-8"></i>
-                    <span>Hami Go 商城</span>
-                </a>
-                <a href="#" class="flex items-center px-6 py-4 hover:bg-blue-700 transition">
-                    <i class="fas fa-users w-8"></i>
-                    <span>VIP 會員經營</span>
-                </a>
-            </nav>
-        </aside>
-
-        <!-- 右側主內容 -->
-        <main class="flex-1 overflow-y-auto">
-            <header class="bg-white shadow-sm px-10 py-6 flex justify-between items-center sticky top-0 z-10">
-                <h2 class="text-2xl font-bold text-gray-700">點數經濟圈經營概況</h2>
-                <div class="flex items-center space-x-6">
-                    <div class="text-right">
-                        <p class="text-xs text-gray-400">年度累計贈點</p>
-                        <p class="text-lg font-bold text-cht-blue">3,052,481,200 P</p>
-                    </div>
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=0056b3&color=fff" class="w-10 h-10 rounded-full border-2 border-hami-green">
-                </div>
-            </header>
-
-            <div class="p-10 space-y-10">
-                
-                <!-- 2. 核心區塊：聯名卡扣繳 (擴大版面，視覺最重) -->
-                <section>
-                    <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-cht-blue">
-                        <div class="bg-cht-blue px-8 py-3 flex justify-between items-center">
-                            <span class="text-white font-bold tracking-widest"><i class="fas fa-star mr-2 text-yellow-400"></i>關鍵獲利與營收穩定核心</span>
-                            <span class="bg-white text-cht-blue text-xs px-3 py-1 rounded-full font-bold">聯名卡業務</span>
-                        </div>
-                        <div class="p-10 flex flex-col lg:flex-row items-center gap-12">
-                            <div class="lg:w-2/5 space-y-6">
-                                <div class="inline-block p-4 bg-blue-50 rounded-2xl">
-                                    <i class="fas fa-file-invoice-dollar text-7xl text-cht-blue"></i>
-                                </div>
-                                <h3 class="text-4xl font-extrabold text-gray-800 leading-tight">聯名卡自動扣繳<br><span class="text-cht-blue">電信費專案</span></h3>
-                                <p class="text-gray-500 text-lg leading-relaxed">
-                                    這是我們生態圈最穩定的贈點火車頭。透過自動扣繳，不僅確保電信帳單即時支付，更將用戶與點數高度綑綁。
-                                </p>
-                                <div class="flex space-x-4">
-                                    <button class="flex-1 bg-cht-blue text-white py-4 rounded-xl font-bold hover:shadow-lg transition">查看扣繳成長曲線</button>
-                                    <button class="px-6 bg-gray-100 text-gray-600 py-4 rounded-xl font-bold hover:bg-gray-200 transition"><i class="fas fa-cog"></i></button>
-                                </div>
-                            </div>
-                            <div class="lg:w-3/5 w-full grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div class="bg-blue-50 p-8 rounded-3xl border border-blue-100 flex flex-col justify-between">
-                                    <span class="text-gray-500 font-medium">當月新辦卡數</span>
-                                    <div class="mt-4">
-                                        <span class="text-4xl font-black text-cht-blue">12,480</span>
-                                        <span class="ml-2 text-green-500 font-bold"><i class="fas fa-arrow-up"></i> 12%</span>
-                                    </div>
-                                </div>
-                                <div class="bg-green-50 p-8 rounded-3xl border border-green-100 flex flex-col justify-between">
-                                    <span class="text-gray-500 font-medium">扣繳回饋比例</span>
-                                    <div class="mt-4">
-                                        <span class="text-4xl font-black text-hami-green">最高 8%</span>
-                                        <span class="ml-2 text-gray-400 text-sm">Hami Point</span>
-                                    </div>
-                                </div>
-                                <div class="bg-orange-50 p-8 rounded-3xl border border-orange-100 flex flex-col justify-between">
-                                    <span class="text-gray-500 font-medium">自動扣繳戶數佔比</span>
-                                    <div class="mt-4">
-                                        <span class="text-4xl font-black text-orange-600">68.5%</span>
-                                        <div class="w-full bg-orange-200 h-2 rounded-full mt-3">
-                                            <div class="bg-orange-600 h-2 rounded-full w-[68%]"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="bg-purple-50 p-8 rounded-3xl border border-purple-100 flex flex-col justify-between">
-                                    <span class="text-gray-500 font-medium">ARPU 提升值</span>
-                                    <div class="mt-4">
-                                        <span class="text-4xl font-black text-purple-700">+ $152</span>
-                                        <span class="ml-2 text-purple-400 text-sm">相較一般客戶</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 點數放大策略 (左側推薦的對應內容) -->
-                <section>
-                    <div class="flex items-center justify-between mb-6">
-                        <h3 class="text-2xl font-bold flex items-center">
-                            <i class="fas fa-rocket mr-3 text-hami-green"></i>點數放大專區：點數價值極大化
-                        </h3>
-                        <a href="#" class="text-cht-blue font-bold hover:underline">更多放大專案 <i class="fas fa-chevron-right ml-1"></i></a>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:border-hami-green transition cursor-pointer">
-                            <div class="bg-lime-100 text-hami-green w-12 h-12 flex items-center justify-center rounded-2xl mb-6">
-                                <i class="fas fa-bolt text-xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold mb-3">1 點抵 2 元</h4>
-                            <p class="text-gray-400 text-sm mb-6">特定檔期神腦生活精品兌換，強效去化到期點數。</p>
-                            <div class="text-2xl font-bold text-gray-700 italic text-right">已兌換 2.5 億點</div>
-                        </div>
-                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:border-hami-green transition cursor-pointer">
-                            <div class="bg-blue-100 text-cht-blue w-12 h-12 flex items-center justify-center rounded-2xl mb-6">
-                                <i class="fas fa-mobile-alt text-xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold mb-3">5G 購機加碼放大</h4>
-                            <p class="text-gray-400 text-sm mb-6">綁約贈點現折機款，帶動高資費方案轉換率。</p>
-                            <div class="text-2xl font-bold text-gray-700 italic text-right">達成率 115%</div>
-                        </div>
-                        <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 hover:border-hami-green transition cursor-pointer">
-                            <div class="bg-purple-100 text-purple-600 w-12 h-12 flex items-center justify-center rounded-2xl mb-6">
-                                <i class="fas fa-gift text-xl"></i>
-                            </div>
-                            <h4 class="text-xl font-bold mb-3">品牌節點數加倍</h4>
-                            <p class="text-gray-400 text-sm mb-6">攜手百貨/超商於大型活動期間點數價值翻倍。</p>
-                            <div class="text-2xl font-bold text-gray-700 italic text-right">YoY +42%</div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 3. 下方推薦：Hami Point 可使用的通路品牌牆 -->
-                <section class="bg-white p-10 rounded-3xl shadow-lg border border-gray-100">
-                    <div class="text-center mb-10">
-                        <h3 class="text-2xl font-bold text-gray-800">全台最強通路生態牆</h3>
-                        <p class="text-gray-400 mt-2">Hami Point 讓用戶在食衣住行都能「有感使用」</p>
+            <div class="p-8 space-y-8">
+                <div>
+                    <label class="block text-sm font-bold text-gray-500 mb-4 flex justify-between">
+                        <span>欲抵扣點數</span>
+                        <span class="text-hami-green">剩餘可用：2,480 P</span>
+                    </label>
+                    <div class="relative group">
+                        <input type="number" id="points-input" value="1000" class="w-full text-4xl font-black p-4 border-b-4 border-gray-100 focus:border-hami-green outline-none transition-all placeholder-gray-200" placeholder="0">
+                        <span class="absolute right-4 bottom-4 text-2xl font-bold text-gray-400">P</span>
                     </div>
                     
-                    <div class="space-y-12">
-                        <!-- 便利超商區 -->
-                        <div>
-                            <div class="flex items-center space-x-3 mb-6">
-                                <span class="bg-gray-800 text-white text-[10px] px-2 py-1 rounded font-bold">高頻消費</span>
-                                <h4 class="text-gray-500 font-bold uppercase tracking-wider text-sm">便利商店 & 超市</h4>
-                            </div>
-                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 text-center">
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">7-ELEVEN</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">FamilyMart</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">Hi-Life</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">OK Mart</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">家樂福</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">全聯</div>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- 快速選擇按鈕 -->
+                    <div class="flex flex-wrap gap-2 mt-6">
+                        <button onclick="setPoints(500)" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-medium transition">500點</button>
+                        <button onclick="setPoints(1000)" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-medium transition">1,000點</button>
+                        <button onclick="setPoints(2000)" class="px-4 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg text-sm font-medium transition">2,000點</button>
+                        <button onclick="setPoints(2480)" class="px-4 py-2 border border-hami-green text-hami-green hover:bg-green-50 rounded-lg text-sm font-bold transition">全部抵扣</button>
+                    </div>
+                </div>
 
-                        <!-- 數位與生活服務 -->
-                        <div>
-                            <div class="flex items-center space-x-3 mb-6">
-                                <span class="bg-gray-800 text-white text-[10px] px-2 py-1 rounded font-bold">生活必備</span>
-                                <h4 class="text-gray-500 font-bold uppercase tracking-wider text-sm">美食外送 & 生活服務</h4>
-                            </div>
-                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 text-center">
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">foodpanda</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">Uber Eats</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">LINE GO</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">星巴克</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">麥當勞</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">摩斯漢堡</div>
-                                </div>
-                            </div>
+                <div class="bg-gray-50 p-6 rounded-2xl flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="bg-white p-3 rounded-full shadow-sm">
+                            <i class="fas fa-shopping-bag text-hami-green text-xl"></i>
                         </div>
-
-                        <!-- 購物與 3C -->
                         <div>
-                            <div class="flex items-center space-x-3 mb-6">
-                                <span class="bg-gray-800 text-white text-[10px] px-2 py-1 rounded font-bold">高額兌換</span>
-                                <h4 class="text-gray-500 font-bold uppercase tracking-wider text-sm">百貨公司 & 3C 電商</h4>
-                            </div>
-                            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 text-center">
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">新光三越</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">SOGO 百貨</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">神腦生活</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">PChome</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">Momo 購物</div>
-                                </div>
-                                <div class="brand-card p-6 bg-gray-50 rounded-2xl border border-transparent hover:border-gray-200">
-                                    <div class="text-lg font-black text-gray-600">蝦皮購物</div>
-                                </div>
-                            </div>
+                            <p class="text-xs text-gray-400 font-bold uppercase">Estimated Discount</p>
+                            <p class="text-2xl font-bold text-gray-700">折抵機款：<span id="discount-val" class="text-blue-600">NT$ 1,000</span></p>
                         </div>
                     </div>
-                </section>
+                    <i class="fas fa-chevron-right text-gray-300"></i>
+                </div>
             </div>
-            
-            <footer class="p-10 text-center text-gray-400 text-sm">
-                &copy; 2024 中華電信 Hami Point 生態圈經營專用系統 - 專家建議由「小哈同學」提供
-            </footer>
-        </main>
-    </div>
+        </section>
 
+        <!-- 視覺化步驟說明 -->
+        <section>
+            <h3 class="text-lg font-bold mb-4 flex items-center">
+                <span class="bg-hami-green w-1 h-6 mr-3 rounded-full"></span>操作流程
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent hover:border-hami-green transition cursor-default">
+                    <div class="text-hami-green font-black text-3xl mb-4">01</div>
+                    <p class="font-bold text-gray-700 mb-1">輸入抵扣點數</p>
+                    <p class="text-sm text-gray-400">輸入您想折抵的點數，確認折抵金額。</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent hover:border-hami-green transition cursor-default">
+                    <div class="text-hami-green font-black text-3xl mb-4">02</div>
+                    <p class="font-bold text-gray-700 mb-1">獲取折抵序號</p>
+                    <p class="text-sm text-gray-400">確認後系統將產生一組 QR Code 序號。</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-transparent hover:border-hami-green transition cursor-default">
+                    <div class="text-hami-green font-black text-3xl mb-4">03</div>
+                    <p class="font-bold text-gray-700 mb-1">門市出示核銷</p>
+                    <p class="text-sm text-gray-400">至中華電信門市購機時出示即可折抵。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 注意事項 -->
+        <section class="bg-gray-100/50 p-6 rounded-2xl">
+            <div class="flex items-center text-gray-500 font-bold mb-4">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <span>注意事項</span>
+            </div>
+            <ul class="text-xs text-gray-400 space-y-2 list-disc pl-4 leading-relaxed">
+                <li>本點數折抵券一旦兌換成功，恕不接受退還、掛失或更換點數。</li>
+                <li>折抵券限於中華電信實體門市購機使用，恕無法於網路門市使用。</li>
+                <li>折抵金額以 1 點抵 1 元計算，單次交易折抵上限請依現場規範為準。</li>
+            </ul>
+        </section>
+
+        <!-- 底部 CTA 固定區域 (優化：大按鈕方便點擊) -->
+        <div class="fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-md border-t border-gray-100 z-50">
+            <div class="max-w-4xl mx-auto">
+                <button class="w-full bg-hami-green text-white py-4 rounded-2xl font-black text-lg shadow-lg shadow-green-200 hover:scale-[1.02] active:scale-95 transition">
+                    確認兌換折抵券
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const input = document.getElementById('points-input');
+        const discountDisplay = document.getElementById('discount-val');
+        const tabDevice = document.getElementById('tab-device');
+        const tabBill = document.getElementById('tab-bill');
+
+        // 即時計算折抵金額
+        input.addEventListener('input', (e) => {
+            const val = e.target.value || 0;
+            discountDisplay.innerText = `NT$ ${parseInt(val).toLocaleString()}`;
+        });
+
+        function setPoints(num) {
+            input.value = num;
+            discountDisplay.innerText = `NT$ ${num.toLocaleString()}`;
+            // 動畫反饋
+            input.classList.add('scale-105');
+            setTimeout(() => input.classList.remove('scale-105'), 200);
+        }
+
+        function switchTab(type) {
+            if(type === 'device') {
+                tabDevice.className = "flex-1 py-3 text-center font-bold rounded-xl transition bg-hami-green text-white";
+                tabBill.className = "flex-1 py-3 text-center font-bold rounded-xl transition text-gray-400 hover:bg-gray-50";
+                document.querySelector('.fa-shopping-bag').className = "fas fa-shopping-bag text-hami-green text-xl";
+                document.getElementById('discount-val').parentNode.firstChild.nextSibling.innerText = "折抵機款：";
+            } else {
+                tabBill.className = "flex-1 py-3 text-center font-bold rounded-xl transition bg-blue-600 text-white";
+                tabDevice.className = "flex-1 py-3 text-center font-bold rounded-xl transition text-gray-400 hover:bg-gray-50";
+                document.querySelector('.fa-shopping-bag').className = "fas fa-file-invoice-dollar text-blue-600 text-xl";
+                document.getElementById('discount-val').parentNode.firstChild.nextSibling.innerText = "折抵帳單：";
+            }
+        }
+    </script>
 </body>
 </html>
