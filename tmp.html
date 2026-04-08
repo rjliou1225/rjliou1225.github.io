@@ -3,141 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>點加金成效的3大提升方向</title>
+    <title>Hami Point 點數生態圈經營架構</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-text {
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .flow-arrow {
+            animation: pulse-arrow 2s infinite;
+        }
+        @keyframes pulse-arrow {
+            0% { opacity: 0.4; transform: translateX(0); }
+            50% { opacity: 1; transform: translateX(5px); }
+            100% { opacity: 0.4; transform: translateX(0); }
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
         }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen p-4 md:p-8 flex items-center justify-center font-sans">
-    
-    <div class="max-w-6xl w-full bg-white rounded-3xl shadow-2xl p-6 md:p-10 border border-slate-100 overflow-hidden relative">
-        <!-- 背景裝飾 -->
-        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-50 to-purple-50 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
-        <div class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-orange-50 to-yellow-50 rounded-full blur-3xl -z-10 -translate-x-1/2 translate-y-1/2"></div>
+<body class="bg-slate-50 min-h-screen p-4 md:p-8 font-sans bg-pattern flex items-center justify-center">
 
-        <!-- 標題區塊 -->
-        <div class="text-center mb-12">
-            <div class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-bold mb-3 tracking-widest shadow-sm">
-                STRATEGY MAP
-            </div>
-            <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 tracking-wide mb-3">
-                <span class="bg-gradient-to-r from-blue-600 to-indigo-600 gradient-text">點加金成效</span> 的3大提升方向
+    <div class="max-w-7xl w-full bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 md:p-10 border border-slate-200">
+        
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-black text-slate-800 tracking-wide mb-3 flex items-center justify-center gap-3">
+                <i class="fas fa-infinity text-blue-600"></i> Hami Point 生態圈經營架構
             </h1>
-            <p class="text-slate-500 font-medium">從商品、行銷到平台體驗，全面驅動高單價轉換與點數去化</p>
+            <p class="text-slate-500 font-medium text-lg">建構高黏著度點數經濟：從獲點、營運到去化的完美閉環</p>
         </div>
 
-        <!-- 核心三大方向 (Grid) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative z-10">
-            
-            <!-- 方向一：商品面 -->
-            <div class="bg-white border-2 border-indigo-100 rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-box-open"></i>
+        <!-- 主架構區塊 (Flex/Grid) -->
+        <div class="flex flex-col lg:flex-row gap-6 items-stretch justify-center relative">
+
+            <!-- ================= 左側：發點與獲取 (EARN) ================= -->
+            <div class="flex-1 bg-blue-50/50 border-2 border-blue-100 rounded-2xl p-5 shadow-sm relative group hover:shadow-md transition-all">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-600 text-white px-6 py-1.5 rounded-full font-bold shadow-lg tracking-widest text-sm">
+                    發點引擎 (EARN)
                 </div>
-                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2 border-b-2 border-indigo-50 pb-3">
-                    <span class="text-indigo-500">01.</span> 從商品面
-                </h2>
+                <h2 class="text-center text-blue-800 font-bold mt-4 mb-5 border-b border-blue-200 pb-2">點數流入與會員獲取</h2>
                 
-                <div class="space-y-4">
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-50 hover:bg-indigo-50 transition-colors">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-mobile-alt text-indigo-500"></i>
-                            <h3 class="font-bold text-slate-700">高單價商品</h3>
+                <div class="space-y-3">
+                    <!-- 卡片 1 -->
+                    <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-blue-100 text-blue-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-signal"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">電信本業賦能</h3>
+                            <p class="text-xs text-slate-500 mt-1">行動/光世代綁約贈點、VIP回饋、加值服務申辦</p>
                         </div>
-                        <p class="text-sm text-slate-600 pl-6 leading-relaxed">引進頂級旗艦指標商品<br><span class="text-xs font-semibold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded mt-1 inline-block">Apple / Samsung</span></p>
                     </div>
-                    
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-50 hover:bg-indigo-50 transition-colors">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-hourglass-half text-indigo-500"></i>
-                            <h3 class="font-bold text-slate-700">限時限量商品</h3>
+                    <!-- 卡片 2 -->
+                    <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-blue-100 text-blue-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-credit-card"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">金融聯名神卡</h3>
+                            <p class="text-xs text-slate-500 mt-1">中華聯名卡、ALL ME卡日常刷卡與辦卡加碼回饋</p>
                         </div>
-                        <p class="text-sm text-slate-600 pl-6 leading-relaxed">創造稀缺性，引爆搶購熱潮<br><span class="text-xs font-semibold text-indigo-600 bg-indigo-100 px-2 py-0.5 rounded mt-1 inline-block">演唱會門票 / 限量公仔</span></p>
+                    </div>
+                    <!-- 卡片 3 -->
+                    <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-blue-100 text-blue-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-building"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">企客外賣與廣告</h3>
+                            <p class="text-xs text-slate-500 mt-1">B2B福委會贈禮、企業購點、OL廣告任務牆賺點</p>
+                        </div>
+                    </div>
+                    <!-- 卡片 4 -->
+                    <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-blue-100 text-blue-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-exchange-alt"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">跨界點數轉入</h3>
+                            <p class="text-xs text-slate-500 mt-1">銀行紅利、LINE Points、P幣等點數交換轉入</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 方向二：行銷面 -->
-            <div class="bg-white border-2 border-orange-100 rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-bullhorn"></i>
+            <!-- 箭頭 1 -->
+            <div class="hidden lg:flex items-center justify-center text-blue-300 text-4xl flow-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <!-- 手機版箭頭 -->
+            <div class="lg:hidden flex items-center justify-center text-blue-300 text-2xl my-2">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+
+            <!-- ================= 中間：核心引擎 (CORE) ================= -->
+            <div class="flex-1 bg-gradient-to-b from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-3xl p-6 shadow-lg relative transform lg:scale-105 z-10">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-8 py-2 rounded-full font-black shadow-lg tracking-widest">
+                    Hami Point 核心大腦
                 </div>
-                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2 border-b-2 border-orange-50 pb-3">
-                    <span class="text-orange-500">02.</span> 從行銷面
-                </h2>
+                <h2 class="text-center text-indigo-800 font-bold mt-5 mb-6 border-b border-indigo-200 pb-2">點數科 / 平台管理與行銷模組</h2>
                 
-                <div class="space-y-4">
-                    <div class="bg-orange-50/50 p-4 rounded-xl border border-orange-50 hover:bg-orange-50 transition-colors">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-search-dollar text-orange-500"></i>
-                            <h3 class="font-bold text-slate-700">點數放大專區</h3>
-                        </div>
-                        <p class="text-sm text-slate-600 pl-6 leading-relaxed">提升點數價值，強化使用動機<br><span class="text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-0.5 rounded mt-1 inline-block">1點抵2元 / 1點抵1.5元</span></p>
+                <div class="grid grid-cols-2 gap-3 mb-4">
+                    <div class="bg-white/80 p-3 rounded-xl border border-indigo-100 text-center shadow-sm">
+                        <i class="fas fa-database text-indigo-500 mb-1 text-lg"></i>
+                        <h3 class="font-bold text-slate-700 text-xs">發行與清算系統</h3>
                     </div>
-                    
-                    <div class="bg-orange-50/50 p-4 rounded-xl border border-orange-50 hover:bg-orange-50 transition-colors">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-gift text-orange-500"></i>
-                            <h3 class="font-bold text-slate-700">點加金專屬優惠</h3>
-                        </div>
-                        <p class="text-sm text-slate-600 pl-6 leading-relaxed">加碼誘因，促動現金結帳意願<br><span class="text-xs font-semibold text-orange-600 bg-orange-100 px-2 py-0.5 rounded mt-1 inline-block">買就送 / 抽獎活動</span></p>
+                    <div class="bg-white/80 p-3 rounded-xl border border-indigo-100 text-center shadow-sm">
+                        <i class="fas fa-robot text-purple-500 mb-1 text-lg"></i>
+                        <h3 class="font-bold text-slate-700 text-xs">AI分群與精準推播</h3>
                     </div>
+                    <div class="bg-white/80 p-3 rounded-xl border border-indigo-100 text-center shadow-sm">
+                        <i class="fas fa-tags text-pink-500 mb-1 text-lg"></i>
+                        <h3 class="font-bold text-slate-700 text-xs">點加金結帳模組</h3>
+                    </div>
+                    <div class="bg-white/80 p-3 rounded-xl border border-indigo-100 text-center shadow-sm">
+                        <i class="fas fa-chart-line text-blue-500 mb-1 text-lg"></i>
+                        <h3 class="font-bold text-slate-700 text-xs">預算與營收管理</h3>
+                    </div>
+                </div>
+
+                <!-- 點數放大策略標籤 -->
+                <div class="bg-indigo-600 text-white p-3 rounded-xl text-center text-sm font-bold shadow-inner">
+                    <i class="fas fa-magic mr-1"></i> 點數放大術：創造 1點 > 1元 的價值
                 </div>
             </div>
 
-            <!-- 方向三：平台面 -->
-            <div class="bg-white border-2 border-teal-100 rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                <div class="w-16 h-16 bg-gradient-to-br from-teal-400 to-emerald-500 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg mb-6 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-laptop-code"></i>
+            <!-- 箭頭 2 -->
+            <div class="hidden lg:flex items-center justify-center text-orange-300 text-4xl flow-arrow" style="animation-delay: 0.5s;">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <!-- 手機版箭頭 -->
+            <div class="lg:hidden flex items-center justify-center text-orange-300 text-2xl my-2">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+
+            <!-- ================= 右側：兌點與去化 (BURN) ================= -->
+            <div class="flex-1 bg-orange-50/50 border-2 border-orange-100 rounded-2xl p-5 shadow-sm relative group hover:shadow-md transition-all">
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-orange-500 text-white px-6 py-1.5 rounded-full font-bold shadow-lg tracking-widest text-sm">
+                    去化場景 (BURN)
                 </div>
-                <h2 class="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2 border-b-2 border-teal-50 pb-3">
-                    <span class="text-teal-500">03.</span> 從平台面
-                </h2>
+                <h2 class="text-center text-orange-800 font-bold mt-4 mb-5 border-b border-orange-200 pb-2">點數消耗與生活應用</h2>
                 
-                <div class="space-y-4">
-                    <div class="bg-teal-50/50 p-4 rounded-xl border border-teal-50 hover:bg-teal-50 transition-colors">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-shopping-cart text-teal-500"></i>
-                            <h3 class="font-bold text-slate-700">結帳流程優化</h3>
+                <div class="space-y-3">
+                    <!-- 卡片 1 -->
+                    <div class="bg-white p-3 rounded-xl border border-orange-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-orange-100 text-orange-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-file-invoice-dollar"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">剛需：電信費折抵</h3>
+                            <p class="text-xs text-slate-500 mt-1">折抵電信帳單、MOD看片金、實體門市消費折抵</p>
                         </div>
-                        <p class="text-sm text-slate-600 pl-6 leading-relaxed">降低流失率，打造無縫體驗<br><span class="text-xs font-semibold text-teal-600 bg-teal-100 px-2 py-0.5 rounded mt-1 inline-block">一鍵帶入最高折抵 / 減少跳轉</span></p>
                     </div>
-                    
-                    <div class="bg-teal-50/50 p-4 rounded-xl border border-teal-50 hover:bg-teal-50 transition-colors">
-                        <div class="flex items-center gap-2 mb-2">
-                            <i class="fas fa-tags text-teal-500"></i>
-                            <h3 class="font-bold text-slate-700">點加金商品標示</h3>
+                    <!-- 卡片 2 -->
+                    <div class="bg-white p-3 rounded-xl border border-orange-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-orange-100 text-orange-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-shopping-bag"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">購物：電商與票券</h3>
+                            <p class="text-xs text-slate-500 mt-1">Hami小舖(虛擬券)、市集、神腦、品牌館(點加金)</p>
                         </div>
-                        <p class="text-sm text-slate-600 pl-6 leading-relaxed">視覺強打，第一時間吸住眼球<br><span class="text-xs font-semibold text-teal-600 bg-teal-100 px-2 py-0.5 rounded mt-1 inline-block">清楚標示點加金價 / 提升吸引力</span></p>
+                    </div>
+                    <!-- 卡片 3 -->
+                    <div class="bg-white p-3 rounded-xl border border-orange-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-orange-100 text-orange-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-gamepad"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">生活：數位服務導客</h3>
+                            <p class="text-xs text-slate-500 mt-1">點數遊樂場、保險/信貸導客、LINE GO乘車、旅遊</p>
+                        </div>
+                    </div>
+                    <!-- 卡片 4 -->
+                    <div class="bg-white p-3 rounded-xl border border-orange-100 shadow-sm flex items-start gap-3">
+                        <div class="bg-orange-100 text-orange-600 w-10 h-10 rounded-lg flex items-center justify-center shrink-0"><i class="fas fa-share-square"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-700 text-sm">流通：跨平台應用</h3>
+                            <p class="text-xs text-slate-500 mt-1">點數交換轉出、 Pi拍錢包/Hami Pay 支付折抵</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- 匯聚箭頭 -->
-        <div class="flex justify-center my-8 text-slate-300 text-3xl opacity-50 relative z-10">
-            <i class="fas fa-angle-double-down animate-bounce"></i>
-        </div>
-
-        <!-- 最終目標/成效匯聚 -->
-        <div class="bg-slate-800 rounded-2xl p-6 text-center relative overflow-hidden shadow-xl z-10">
-            <!-- 發光效果 -->
-            <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-orange-500/20"></div>
-            <div class="relative z-10">
-                <h3 class="text-white text-xl md:text-2xl font-bold tracking-widest mb-2 flex items-center justify-center gap-3">
-                    <i class="fas fa-rocket text-yellow-400"></i> 創造點數生態圈最大綜效
-                </h3>
-                <p class="text-slate-300 text-sm md:text-base font-medium">
-                    帶動 <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded mx-1">高單商品現金交易額 (GMV)</span> 
-                    並加速 <span class="text-white font-bold bg-white/20 px-2 py-0.5 rounded mx-1">大額點數去化</span>
-                </p>
+        <!-- ================= 底部：營運綜效 ================= -->
+        <div class="mt-12 bg-slate-800 rounded-2xl p-6 text-center relative overflow-hidden shadow-xl">
+            <div class="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-orange-600/20"></div>
+            <h3 class="text-white text-lg font-bold tracking-widest mb-4 relative z-10">
+                <i class="fas fa-trophy text-yellow-400 mr-2"></i> 創造生態圈最大商業價值 (Business Value)
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+                <div class="bg-white/10 border border-white/20 rounded-lg p-3">
+                    <div class="text-blue-300 text-xl mb-1"><i class="fas fa-user-shield"></i></div>
+                    <div class="text-white font-bold text-sm">鞏固電信核心本業</div>
+                    <div class="text-slate-400 text-xs mt-1">提升黏著度，降低客戶流失率</div>
+                </div>
+                <div class="bg-white/10 border border-white/20 rounded-lg p-3">
+                    <div class="text-purple-300 text-xl mb-1"><i class="fas fa-chart-pie"></i></div>
+                    <div class="text-white font-bold text-sm">帶動新經濟營收</div>
+                    <div class="text-slate-400 text-xs mt-1">點加金GMV成長與佣金手續費收入</div>
+                </div>
+                <div class="bg-white/10 border border-white/20 rounded-lg p-3">
+                    <div class="text-orange-300 text-xl mb-1"><i class="fas fa-project-diagram"></i></div>
+                    <div class="text-white font-bold text-sm">數據變現與跨界導客</div>
+                    <div class="text-slate-400 text-xs mt-1">精準行銷與金融/旅遊跨售賦能</div>
+                </div>
             </div>
         </div>
 
