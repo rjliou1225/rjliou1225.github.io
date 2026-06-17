@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+	<head>
+		<meta charset="UTF-8" />
+		<title>行車生活圈</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
+		<meta name="format-detection" content="telephone=no" />
+		<!-- <meta name="description" content=""> -->
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- CSS -->
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<style> .nav .icon-nav .img-icon-nav{width: auto !important;}
+		.event .btn-event {
+  width: 50vw;
+}
+		.custom-btn {
+    /* 這裡的漸層顏色是模仿你圖片的橘黃色調 */
+    background: linear-gradient(to bottom, #ffcb13 0%, #fc8800 100%);
+    color: #ffffff;             /* 白色文字 */
+    font-size: 18px;            /* 字體大小，可自行調整 */
+    font-weight: bold;          /* 粗體字 */
+    border: none;               /* 移除預設邊框 */
+    border-radius: 50px;        /* 膠囊形狀圓角 */
+    cursor: pointer;            /* 滑鼠滑過時顯示手指形狀 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); /* 微弱陰影，讓按鈕更有立體感 */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* 文字微弱陰影 */
+    transition: transform 0.1s ease; /* 點擊時的動態效果 */
+}
+  .event .btn-event .custom-btn{
+    font-size: 3.4vw;
+	height: 8vw;
+  }
+@media (min-width: 750px) {
+  .event .btn-event .custom-btn{
+    font-size: 26px;
+	height: 60px;
+  }
+}
+
+/* 點擊按鈕時縮小的微互動 */
+.custom-btn:active {
+    transform: scale(0.98);
+}</style>
+<!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5WCGJ7V');</script><!-- End Google Tag Manager -->
+<script src="applink.js"></script>
+
+	</head>
+
+	<body class="index">
+
+<!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5WCGJ7V" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) -->
+		<!--header class="header">
+			<h1 class="title-page" title="叫車停車">叫車停車</h1>
+		</header-->
+		<nav class="nav">
+			<a
+				href="javascript:void(0);" class="btn-nav" onclick="openOrDownloadApp({
+					iosScheme: 'autopass://',
+					androidScheme: 'autopass://',
+					appStore: 'https://apps.apple.com/tw/app/id1313622410',
+					playStore: 'https://play.google.com/store/apps/details?id=com.autopass.main',
+					officialWebsite: 'https://carmochi.com/'
+			})">
+				<div class="icon-nav">
+					<img
+						src="images/carmochi_app-icon_02.png"
+						alt="Autopass"
+						class="img-icon-nav"
+					/>
+				</div>
+				<h6 class="name-nav" title="LINE GO">車麻吉</h6>
+				<h6 class="name-nav" title="LINE GO">(Autopass)</h6>
+			</a>
+			<a 
+				href="javascript:void(0);" class="btn-nav" onclick="openOrDownloadApp({
+					iosScheme: 'vivipark://', 
+    				androidScheme: 'vivipark://',
+					appStore: 'https://apps.apple.com/tw/app/vivi-park/id1580934849', 
+    				playStore: 'https://play.google.com/store/apps/details?id=com.vivipark.app', 
+					officialWebsite: 'https://vivi-park.com/'
+			})">
+				<div class="icon-nav">
+					<img
+						src="images/icon_vivipark.jpg"
+						alt="ViVi PARK"
+						class="img-icon-nav"
+					/>
+				</div>
+				<h6 class="name-nav" title="ViVi PARK">ViVi PARK</h6>
+				<div class="hint-nav">1點折1元</div>
+			</a>
+			<a
+				href="https://lihi3.me/VxZs6" class="btn-nav"
+			>
+				<div class="icon-nav">
+					<img
+						src="images/icon_linego.jpg"
+						alt="LINE GO"
+						class="img-icon-nav"
+					/>
+				</div>
+				<h6 class="name-nav" title="LINE GO">LINE GO</h6>
+			</a>
+		</nav>
+		<main class="main">
+			<h2 class="title-events" title="優惠活動">
+				<img
+					src="https://hamipoint.cht.com.tw/health/images/title_events1.png"
+					alt="優惠活動"
+					class="img-fluid"
+				/>
+			</h2>
+			<section class="event">
+				<h4 class="title-event" title="Autopass">車麻吉（Autopass）</h4>
+				<div class="content-event">
+					<div class="group-event-1 group-event-3333">
+
+						<div class="row">
+							<div class="col-auto col-event-1 align-items-center">
+								<i class="icon-arrow"></i>免轉點、免換券，Hami Point點數<strong>直接折抵</strong>車麻吉 App 全台3500+個停車場、路邊停車、加油站、充電站。2026/6/1～8/31 綁定Hami Point送免費停車，折抵行車費用再回饋<strong>10%</strong>！
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<a
+								href="https://autopass.app.link/M3qHgdTDFXb"
+								class="btn-event"
+							>
+								<button type="button" class="custom-btn img-fluid">前往綁定</button>
+							</a>
+						</div>
+						</div>
+						<div class="group-event-1">
+						<div class="row">
+							<div class="col-auto col-event-1 align-items-center">
+								<i class="icon-arrow"></i>2026/6/1～8/31 Hami 點數王挑戰！<br />
+									停車、路停、加油、充電等行車費用使用 Hami Point 折抵，每月點數累積折抵前 10 名，即可贏得 Hami Point 3000點等限量好禮！
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<a
+								href="https://pages.pass.credit/cht-hamipoint"
+								class="btn-event"
+							>
+								<button type="button" class="custom-btn img-fluid">前往說明頁</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="event event2222">
+				<h4 class="title-event" title="ViVi PARK">ViVi PARK</h4>
+				<div class="content-event">
+					<div class="group-event-1 group-event-3333">
+
+<div class="row">
+							<div class="col-auto col-event-1 align-items-center">
+								<i class="icon-arrow"></i>中華電信好友專屬(2026/6/1~8/31)： ① 凡活動期間首次註冊ViVi PARK會員，註冊時輸入識別碼「<strong>hami</strong>」，並成功綁定中華電信門號者，<strong>贈Hami Point 30點</strong>！
+								<br>(1)全台路停100萬格皆可查繳<br>(2)600場月租超低價任您選<br>(3)饗食天堂、Mycard點數買起來
+							</div>
+						</div>
+						<!--div class="row">
+							<ul class="list-event">
+								<li>
+									中華電信好友專屬：<br />
+									2026/3/31 前首次註冊ViVi PARK APP，輸入識別碼「hami」，立即獲得Vi幣30點！
+								</li>
+							</ul>
+						</div-->
+						<div class="row justify-content-center">
+							<a
+								href="https://vivi-park.com/vivipark-app-auth/"
+								class="btn-event"
+							>
+								<button type="button" class="custom-btn img-fluid">前往說明頁</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section class="event">
+				<h4 class="title-event" title="LINE GO">LINE GO</h4>
+				<div class="content-event">
+					<div class="group-event-1">
+						<div class="row">
+							<div
+								class="col-auto col-event-1 align-items-center"
+							>
+								<i class="icon-arrow"></i>乘車券
+								<strong>40元</strong>
+							</div>
+							<div class="col col-event-1" style="padding-left:24px">
+								<i class="icon-arrow"></i>共享租車券
+								<strong>150元</strong>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-auto col-event-1 align-items-center">
+								<i class="icon-arrow"></i> 代駕券
+								<strong>150元</strong>
+							</div>	
+							<div
+								class="col-auto col-event-1 align-items-center"
+							>
+								<i class="icon-arrow"></i>機場接送券
+								<strong>199元</strong>
+							</div>
+						</div>
+						<!---
+						<div class="row">
+							<div
+								class="col-auto col-event-1 align-items-center"
+							>
+								<i class="icon-arrow"></i
+								>新註冊禮加碼！領取總價值
+								<strong>1200元</strong>大禮包
+							</div>
+						</div>
+						--->
+						<div class="row justify-content-center">
+							<a
+								href="https://vip.cht.com.tw/my/coupon?area=%E5%B0%8F%E7%A2%BA%E5%B9%B8&filter=LINE+GO"
+								class="btn-event"
+							>
+								<button type="button" class="custom-btn img-fluid">領取通勤代步優惠券</button>
+							</a>
+						</div>
+					</div>
+					<div class="group-event-2">
+						<div class="row">
+							<div class="col">
+								<p class="txt-event-2">
+									Hami Point票券館兌換LINEGO票券<br />
+									乘車券/機場接送券/租車券
+									<i class="icon-ticket"></i>
+								</p>
+							</div>
+						</div>
+						<div class="row justify-content-center">
+							<a
+								href="https://hamipoint.cht.com.tw/store/brand/359?active=2"
+								class="btn-event"
+							>
+							<button type="button" class="custom-btn img-fluid">前往Hami Point票券館</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</section>
+		</main>
+		<script>
+const targetDate = new Date('2026-06-01');
+const now = new Date();
+
+if (now >= targetDate) {
+document.getElementById('hide0601').style.display = 'none';  // Logic to run if the current date is AFTER the target date
+//  console.log("The date has passed!");
+}
+</script>
+	</body>
+</html>
+
+
