@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>即將開啟 車麻吉...</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            background-color: #F8F9FA; 
+            color: #111827; 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            overflow: hidden; 
+        }
+        .loading-bar-fill {
+            animation: grow-load 2.5s linear forwards;
+        }
+        @keyframes grow-load {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="max-w-[480px] w-full mx-auto p-4">
+        <div class="bg-white rounded-[40px] border border-gray-200 p-10 text-center shadow-[0_10px_40px_rgba(0,0,0,0.03)] relative overflow-hidden">
+            
+            <div class="inline-flex items-center px-3 py-1 bg-[#ECFDF5] text-[#059669] rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
+                Smart Routing Active
+            </div>
+
+            <!-- App Logo Icon -->
+            <div class="relative w-24 h-24 rounded-[24px] bg-gray-55 border border-gray-100 mx-auto mb-6 flex items-center justify-center overflow-hidden shadow-xs">
+                <img src="https://images.unsplash.com/photo-1617788138017-80ad40651399?w=128&h=128&fit=crop&crop=faces&q=80" alt="車麻吉" class="w-full h-full object-cover">
+            </div>
+
+            <h1 class="text-2xl font-bold tracking-tight text-gray-900 mb-2">Opening 車麻吉</h1>
+            <p class="text-sm text-gray-500 max-w-sm mx-auto mb-6">Detecting the best experience for your device...</p>
+
+            <!-- Loading indicator -->
+            <div class="w-full h-1 bg-gray-100 rounded-full relative overflow-hidden mb-6">
+                <div class="loading-bar-fill absolute left-0 top-0 h-full bg-[#111827] rounded-full"></div>
+            </div>
+
+            <!-- Special LINE/FB Prompt Warning Webview -->
+            <div id="line-fb-warning" class="hidden text-left text-xs bg-amber-50 text-amber-900 p-4 border border-amber-200/60 rounded-2xl mb-6 leading-relaxed">
+                📢 <strong>系統提示：</strong>
+                偵測到您正在使用社群軟體內建瀏覽器 (LINE 或 FB)。如果跳轉失敗，請點擊右上角點點選單，選擇
+                <strong>「以系統預設瀏覽器（Safari 或 Chrome）」開啟</strong>，即可完美跳入 App 中！
+            </div>
+
+            <!-- Primary Action Button -->
+            <a href="javascript:void(0)" onclick="triggerSmartJump()" id="cta-btn" class="block w-full py-4 bg-[#111827] text-white rounded-2xl font-semibold text-center text-sm shadow-sm hover:opacity-90 active:scale-98 transition-all">
+                Open App Automatically
+            </a>
+
+            <div class="text-xs text-gray-400 mt-5 uppercase tracking-wider font-semibold">Or select manually</div>
+            
+            <div class="grid grid-cols-2 gap-3 mt-4">
+                <a href="https://apps.apple.com/app/id1358114408" class="flex items-center justify-center py-3 border border-gray-200 rounded-2xl text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
+                    App Store
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.autopass.carmochi" class="flex items-center justify-center py-3 border border-gray-200 rounded-2xl text-xs font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
+                    ▶ Google Play
+                </a>
+            </div>
+
+            <a href="https://carmochi.com" class="block mt-4 py-3 bg-gray-50 text-gray-600 hover:bg-gray-100 rounded-2xl text-xs font-semibold border border-gray-150 transition-all">
+                Continue to Official Website
+            </a>
+            
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const CONFIG = {
+            appName: "車麻吉",
+            iosScheme: "carmochi://",
+            iosAppId: "1358114408",
+            androidScheme: "carmochi://",
+            androidPackage: "com.autopass.carmochi",
+            fallbackUrl: "https://carmochi.com",
+            timeoutMs: 2500
+        };
+
+        function detectDevice() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            if (/iPad|iPhone|iPod/.test(ua) && !window.MSStream) return 'iOS';
+            if (/android/i.test(ua)) return 'Android';
+            return 'Desktop';
+        }
+
+        function checkWebView() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            if (/Line|FBAN|FBAV/i.test(ua)) {
+                const w = document.getElementById('line-fb-warning');
+                if (w) w.classList.remove('hidden');
+            }
+        }
+
+        function triggerSmartJump() {
+            const device = detectDevice();
+            const btn = document.getElementById('cta-btn');
+            if (btn) btn.innerHTML = "Opening App...";
+
+            if (device === 'iOS') {
+                const iosStoreUrl = "https://apps.apple.com/app/id" + CONFIG.iosAppId;
+                const scheme = CONFIG.iosScheme || CONFIG.fallbackUrl;
+                const startTime = Date.now();
+                let hasLeft = false;
+
+                const onHide = () => { hasLeft = true; };
+                document.addEventListener('visibilitychange', onHide);
+
+                window.location.href = scheme;
+
+                setTimeout(() => {
+                    document.removeEventListener('visibilitychange', onHide);
+                    if (Date.now() - startTime < CONFIG.timeoutMs + 400 && !hasLeft) {
+                        window.location.href = iosStoreUrl;
+                    }
+                }, CONFIG.timeoutMs);
+
+            } else if (device === 'Android') {
+                const androidStoreUrl = "https://play.google.com/store/apps/details?id=" + CONFIG.androidPackage;
+                const scheme = CONFIG.androidScheme;
+                const startTime = Date.now();
+                let hasLeft = false;
+
+                const onHide = () => { hasLeft = true; };
+                document.addEventListener('visibilitychange', onHide);
+
+                window.location.href = scheme;
+
+                setTimeout(() => {
+                    document.removeEventListener('visibilitychange', onHide);
+                    if (Date.now() - startTime < CONFIG.timeoutMs + 400 && !hasLeft) {
+                        window.location.href = androidStoreUrl;
+                    }
+                }, CONFIG.timeoutMs);
+
+            } else {
+                window.location.href = CONFIG.fallbackUrl;
+            }
+        }
+
+        window.onload = function() {
+            checkWebView();
+            // 在實際環境中可解開註解以開啟時自動分流：
+            // triggerSmartJump();
+        };
+    </script>
+</body>
+</html>
